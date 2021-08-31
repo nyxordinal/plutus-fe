@@ -76,6 +76,7 @@ const IndexPage = () => {
               title=""
               columns={columnExpense}
               components={{
+                // eslint-disable-next-line react/display-name
                 Container: (props) => (
                   <Paper {...props} elevation={0} />
                 )
@@ -98,6 +99,7 @@ const IndexPage = () => {
               title=""
               columns={columnIncome}
               components={{
+                // eslint-disable-next-line react/display-name
                 Container: (props) => (
                   <Paper {...props} elevation={0} />
                 )
