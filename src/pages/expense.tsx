@@ -97,7 +97,8 @@ const ExpensePage = () => {
                             title=""
                             columns={column}
                             components={{
-                                Container: (props) => (
+                                // eslint-disable-next-line react/display-name
+                                Container: props => (
                                     <Paper {...props} elevation={0} />
                                 )
                             }}

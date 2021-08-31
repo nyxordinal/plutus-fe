@@ -73,6 +73,7 @@ const IncomePage = () => {
                         title=""
                         columns={column}
                         components={{
+                            // eslint-disable-next-line react/display-name
                             Container: (props) => (
                                 <Paper {...props} elevation={0} />
                             )
