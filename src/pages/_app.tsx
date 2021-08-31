@@ -1,3 +1,4 @@
+import { AuthProvider } from '@auth';
 import { blue, indigo } from '@material-ui/core/colors';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import type { AppProps } from 'next/app';
@@ -26,7 +27,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 <title>Plutus</title>
             </Head>
             <ThemeProvider theme={theme}>
-                <Component {...pageProps} />
+                <AuthProvider>
+                    <Component {...pageProps} />
+                </AuthProvider>
             </ThemeProvider>
         </Fragment>
     )
