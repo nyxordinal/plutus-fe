@@ -13,7 +13,7 @@ export interface AuthAPIResponse<T> {
 
 export interface ServiceResponse<T = any> {
     success: boolean
-    message: string | string[]
+    message: string
     data?: T
 }
 
@@ -23,12 +23,17 @@ export interface LoginResponse {
     email: string
 }
 
-export interface ExpenseResponse {
+export interface ExpenseResponseItem {
     id: number
     name: string
     type_id: number
     price: number
     date: string
+}
+
+export interface ExpenseResponse {
+    data: ExpenseResponseItem[]
+    total: number
 }
 
 export interface SummaryResponse {

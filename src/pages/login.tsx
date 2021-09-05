@@ -50,7 +50,7 @@ const LoginPage = () => {
                 password.trim()
             )
             if (!result.success) {
-                openSnackbar('error', result.message as string)
+                openSnackbar('error', result.message)
             }
         }
     }
