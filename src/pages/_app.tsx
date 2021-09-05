@@ -1,11 +1,11 @@
 import { AuthProvider } from '@auth';
 import { blue, indigo } from '@material-ui/core/colors';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Fragment } from 'react';
 
-const theme = createMuiTheme({
+const theme = createTheme({
     palette: {
         primary: {
             main: blue[500]
