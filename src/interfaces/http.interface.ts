@@ -41,9 +41,21 @@ export interface SummaryResponse {
     amount: string
 }
 
+export interface IncomeResponseItem {
+    id: number
+    source: string
+    amount: number
+    date: string
+}
+
 export interface IncomeResponse {
     id: number
     source: string
     amount: number
     date: string
+}
+
+export interface IncomeResponse {
+    data: IncomeResponseItem[]
+    total: number
 }

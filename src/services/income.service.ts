@@ -1,14 +1,24 @@
 import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "@interface/constant";
-import { Summary, Income } from "@interface/entity.interface";
-import { APIResponse, SummaryResponse, IncomeResponse, ServiceResponse } from "@interface/http.interface";
-import { formatDateSimple } from "@util";
+import { CreateIncomeInterface, GetAllIncomeServiceResult } from "@interface/dto.interface";
+import { Income, Summary } from "@interface/entity.interface";
+import { APIResponse, IncomeResponse, IncomeResponseItem, ServiceResponse, SummaryResponse } from "@interface/http.interface";
 import { API } from "api";
 
-export const getAllIncomes = async (): Promise<Income[]> => {
-    const r: APIResponse<IncomeResponse[]> = await API.get('/income')
+const getAllIncomesQuery = (page: number, dataPerPage: number): string => {
+    let query = "/income"
+    page === 0
+        ? query = query.concat("?page=1")
+        : query = query.concat("?page=" + page.toString())
+    dataPerPage === 0
+        ? query = query.concat("&count=5")
+        : query = query.concat("&count=" + dataPerPage.toString())
+    return query
+}
+export const getAllIncomes = async (page: number, dataPerPage: number): Promise<GetAllIncomeServiceResult> => {
+    const r: APIResponse<IncomeResponse> = await API.get(getAllIncomesQuery(page, dataPerPage))
     if (r.code === HTTP_STATUS_OK) {
-        const responseData = r.data as IncomeResponse[]
-        const data: Income[] = responseData.map((income) => {
+        const { data, total } = r.data as IncomeResponse
+        const incomeData: Income[] = data.map((income) => {
             return {
                 id: income.id,
                 source: income.source,
@@ -16,9 +26,9 @@ export const getAllIncomes = async (): Promise<Income[]> => {
                 date: new Date(income.date)
             }
         })
-        return data
+        return { incomeData, totalData: total }
     }
-    return []
+    return { incomeData: [], totalData: 0 }
 }
 
 export const getIncomeSummary = async (): Promise<Summary[]> => {
@@ -37,42 +47,23 @@ export const getIncomeSummary = async (): Promise<Summary[]> => {
 }
 
 export const createIncome = async (
-    income: Income,
+    income: CreateIncomeInterface,
 ): Promise<ServiceResponse> => {
-    const data: IncomeResponse = {
-        id: income.id,
-        source: income.source,
-        amount: income.amount,
-        date: formatDateSimple(income.date)
-    }
-
-    const r: APIResponse<null> = await API.post('/income', data)
+    const r: APIResponse<null> = await API.post('/income', income)
 
     if (r.code === HTTP_STATUS_CREATED) return { success: true, message: r.message }
     return { success: false, message: r.error as string }
 }
 
 export const updateIncome = async (
-    newData: Income,
-    oldData: Income
+    updateData: Income,
 ): Promise<ServiceResponse> => {
-    let newDate: any = newData.date
-    if (typeof newDate === 'string') newDate = new Date(newDate)
-    let oldDate: any = oldData.date
-    if (typeof oldDate === 'string') oldDate = new Date(oldDate)
-    if (
-        newData.id === oldData.id
-        && newData.source === oldData.source
-        && newData.amount === oldData.amount
-        && newDate.getTime() === oldDate.getTime()
-    ) {
-        return { success: true, message: '' }
-    }
+    let newDate: any = updateData.date
 
-    const data: IncomeResponse = {
-        id: newData.id,
-        source: newData.source,
-        amount: newData.amount,
+    const data: IncomeResponseItem = {
+        id: updateData.id,
+        source: updateData.source,
+        amount: updateData.amount,
         date: newDate.toISOString().split('T')[0]
     }
 
@@ -82,10 +73,10 @@ export const updateIncome = async (
     return { success: false, message: r.error as string }
 }
 
-export const deleteIncome = async (
-    income: Income
+export const deleteBulkIncome = async (
+    ids: number[]
 ): Promise<ServiceResponse> => {
-    const r: APIResponse<null> = await API.delete(`/income/${income.id}`)
+    const r: APIResponse<null> = await API.post('/income/delete/bulk', { ids })
 
     if (r.code === HTTP_STATUS_OK) return { success: true, message: r.message }
     return { success: false, message: r.message }

@@ -1,4 +1,4 @@
-import { Expense } from "./entity.interface";
+import { Expense, Income } from "./entity.interface";
 
 export type Order = 'asc' | 'desc';
 
@@ -20,4 +20,15 @@ export interface GetAllExpenseServiceInterface {
     startDate?: Date
     endDate?: Date
     name?: string
+}
+
+export interface GetAllIncomeServiceResult {
+    incomeData: Income[]
+    totalData: number
+}
+
+export interface CreateIncomeInterface {
+    source: string
+    amount: number
+    date: string
 }
