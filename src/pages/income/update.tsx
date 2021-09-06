@@ -6,7 +6,7 @@ import { Button, Grid, Snackbar, TextField, Typography } from '@material-ui/core
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Alert, Color } from '@material-ui/lab';
 import { updateIncome } from '@services/income.service';
-import { useLocalStorage } from '@util';
+import { formatDateSimple, useLocalStorage } from '@util';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -136,7 +136,7 @@ const IncomeUpdatePage = () => {
                                             shrink: true,
                                         }}
                                         variant="outlined"
-                                        value={date.toISOString().split('T')[0]}
+                                        value={formatDateSimple(date)}
                                         onChange={handleDateChange}
                                         fullWidth
                                     />

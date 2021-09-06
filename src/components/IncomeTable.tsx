@@ -25,7 +25,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Alert, Color } from '@material-ui/lab';
 import { deleteBulkIncome } from '@services/income.service';
-import { useLocalStorage } from '@util';
+import { currencyFormatter, formatDateSimple, useLocalStorage } from '@util';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
@@ -429,8 +429,8 @@ export const IncomeTable = (props: IncomeTableProps) => {
                                                 <TableCell component="th" id={labelId} scope="row" padding="none">
                                                     {row.source}
                                                 </TableCell>
-                                                <TableCell align="right">{row.amount}</TableCell>
-                                                <TableCell align="right">{row.date.toISOString().split('T')[0]}</TableCell>
+                                                <TableCell align="right">{currencyFormatter.format(row.amount)}</TableCell>
+                                                <TableCell align="right">{formatDateSimple(row.date)}</TableCell>
                                             </TableRow>
                                         );
                                     })}

@@ -2,6 +2,7 @@ import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "@interface/constant";
 import { CreateExpenseInterface, GetAllExpenseServiceInterface, GetAllExpenseServiceResult } from "@interface/dto.interface";
 import { Expense, Summary } from "@interface/entity.interface";
 import { APIResponse, ExpenseResponse, ExpenseResponseItem, ServiceResponse, SummaryResponse } from "@interface/http.interface";
+import { formatDateSimple } from "@util";
 import { API } from "api";
 
 const getAllExpensesQuery = (params: GetAllExpenseServiceInterface): string => {
@@ -71,7 +72,7 @@ export const updateExpense = async (
         name: updateData.name,
         type_id: updateData.typeId,
         price: updateData.price,
-        date: updateData.date.toISOString().split('T')[0]
+        date: formatDateSimple(updateData.date)
     }
 
     const r: APIResponse<null> = await API.put('/expense', data)
