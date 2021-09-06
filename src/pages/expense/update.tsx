@@ -7,11 +7,11 @@ import { Button, Grid, MenuItem, Snackbar, TextField, Typography } from '@materi
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Alert, Color } from '@material-ui/lab';
 import { updateExpense } from '@services/expense.service';
-import { ToArray, useLocalStorage } from '@util';
+import { enumToArray, formatDateSimple, useLocalStorage } from '@util';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 
-const expenseType = ToArray(EXPENSE_TYPE)
+const expenseType = enumToArray(EXPENSE_TYPE)
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -164,7 +164,7 @@ const ExpenseUpdatePage = () => {
                                             shrink: true,
                                         }}
                                         variant="outlined"
-                                        value={date.toISOString().split('T')[0]}
+                                        value={formatDateSimple(date)}
                                         onChange={handleDateChange}
                                         fullWidth
                                     />

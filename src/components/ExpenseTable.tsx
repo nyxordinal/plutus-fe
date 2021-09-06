@@ -26,7 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Alert, Color } from '@material-ui/lab';
 import { deleteBulkExpense } from '@services/expense.service';
-import { useLocalStorage } from '@util';
+import { currencyFormatter, formatDateSimple, useLocalStorage } from '@util';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
@@ -432,8 +432,8 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                                                 <TableCell component="th" id={labelId} scope="row" padding="none">
                                                     {row.name}
                                                 </TableCell>
-                                                <TableCell align="right">{row.price}</TableCell>
-                                                <TableCell align="right">{row.date.toISOString().split('T')[0]}</TableCell>
+                                                <TableCell align="right">{currencyFormatter.format(row.price)}</TableCell>
+                                                <TableCell align="right">{formatDateSimple(row.date)}</TableCell>
                                                 <TableCell align="right">{EXPENSE_TYPE[row.typeId]}</TableCell>
                                             </TableRow>
                                         );

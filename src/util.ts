@@ -1,5 +1,10 @@
 import { useState } from "react";
 
+/**
+ * Convert date to YYYY-MM-DD string in Asia/Jakarta timezone
+ * @param {Date} date - input date
+ * @returns {string} output date in YYYY-MM-DD string format
+ */
 export const formatDateSimple = (date: Date): string => {
     const localeDateString = date.toLocaleDateString('en-US', {
         timeZone: 'Asia/Jakarta',
@@ -8,14 +13,14 @@ export const formatDateSimple = (date: Date): string => {
         day: '2-digit',
     });
     const splitted = localeDateString.split('/');
-    const year = splitted[2];
-    const month = splitted[0];
-    const day = splitted[1];
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate
+    return `${splitted[2]}-${splitted[0]}-${splitted[1]}`;
 }
 
+/**
+ * Convert date to YYYY-MM string
+ * @param {Date} date - input date
+ * @returns {string} output date in YYYY-MM string format
+ */
 export const formatDateShort = (date: Date): string => {
     let mm: any = date.getMonth() + 1;
     if (mm < 10) {
@@ -58,11 +63,18 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
     return [storedValue, setValue] as const;
 }
 
-export const StringIsNumber = (value: any) => isNaN(Number(value)) === false;
-
-export const ToArray = (enumme: any) => {
+/**
+ * Convert enum to array
+ * @param {enum} enumme - input enum
+ * @returns {EnumArray} enum array output
+ */
+type EnumArray = {
+    label: string,
+    value: number
+}
+export const enumToArray = (enumme: any): EnumArray[] => {
     return Object.keys(enumme)
-        .filter(StringIsNumber)
+        .filter((value: any): boolean => isNaN(Number(value)) === false)
         .map(key => {
             return {
                 label: enumme[key],
@@ -70,3 +82,13 @@ export const ToArray = (enumme: any) => {
             }
         });
 }
+
+/**
+ * Convert number to IDR currency
+ */
+export const currencyFormatter = new Intl.NumberFormat('ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+})

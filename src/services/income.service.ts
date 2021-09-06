@@ -2,6 +2,7 @@ import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "@interface/constant";
 import { CreateIncomeInterface, GetAllIncomeServiceResult } from "@interface/dto.interface";
 import { Income, Summary } from "@interface/entity.interface";
 import { APIResponse, IncomeResponse, IncomeResponseItem, ServiceResponse, SummaryResponse } from "@interface/http.interface";
+import { formatDateSimple } from "@util";
 import { API } from "api";
 
 const getAllIncomesQuery = (page: number, dataPerPage: number): string => {
@@ -64,7 +65,7 @@ export const updateIncome = async (
         id: updateData.id,
         source: updateData.source,
         amount: updateData.amount,
-        date: newDate.toISOString().split('T')[0]
+        date: formatDateSimple(newDate)
     }
 
     const r: APIResponse<null> = await API.put('/income', data)

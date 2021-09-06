@@ -5,7 +5,7 @@ import { Summary } from '@interface/entity.interface';
 import { CircularProgress, makeStyles, Paper, Typography } from '@material-ui/core';
 import { getExpenseSummary } from '@services/expense.service';
 import { getIncomeSummary } from '@services/income.service';
-import { formatDateShort } from '@util';
+import { currencyFormatter, formatDateShort } from '@util';
 import MaterialTable, { Column } from 'material-table';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -26,6 +26,7 @@ const columnExpense: Column<Summary>[] = [
     title: 'Price',
     field: 'amount',
     type: 'numeric',
+    render: rowData => currencyFormatter.format(rowData.amount)
   },
 ]
 
@@ -40,6 +41,7 @@ const columnIncome: Column<Summary>[] = [
     title: 'Amount',
     field: 'amount',
     type: 'numeric',
+    render: rowData => currencyFormatter.format(rowData.amount)
   },
 ]
 

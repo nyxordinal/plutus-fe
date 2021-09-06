@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import { getAllExpenses } from '@services/expense.service';
+import { formatDateSimple } from '@util';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -127,7 +128,7 @@ const ExpensePage = () => {
                                             label="Start Date"
                                             variant="outlined"
                                             type="date"
-                                            value={startDate.toISOString().split('T')[0]}
+                                            value={formatDateSimple(startDate)}
                                             onChange={handleStartDateChange}
                                             fullWidth
                                             InputLabelProps={{
@@ -143,7 +144,7 @@ const ExpensePage = () => {
                                             label="End Date"
                                             variant="outlined"
                                             type="date"
-                                            value={endDate.toISOString().split('T')[0]}
+                                            value={formatDateSimple(endDate)}
                                             onChange={handleEndDateChange}
                                             fullWidth
                                             InputLabelProps={{

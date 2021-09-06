@@ -116,7 +116,7 @@ const IncomeCreatePage = () => {
                                             shrink: true,
                                         }}
                                         variant="outlined"
-                                        value={date.toISOString().split('T')[0]}
+                                        value={formatDateSimple(date)}
                                         onChange={handleDateChange}
                                         fullWidth
                                     />
