@@ -45,7 +45,7 @@ const AuthContext = createContext<AuthContextType>({
                 throw new Error('Login failed')
             }
             return { success: true, message: '' }
-        } catch (error) {
+        } catch (error: any) {
             return { success: false, message: error.message }
         }
     },
@@ -86,7 +86,6 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
                 email,
                 password
             })
-            if (status !== 200) throw new Error('Login failed')
             const { data: userData } = data
             const loginResponse = userData as LoginResponse
             const user: User = {
@@ -102,13 +101,19 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
                 window.location.pathname = '/'
             }
             return { success: true, message: 'Login success' }
-        } catch (error) {
+        } catch (error: any) {
+            if (error.response)
+                return {
+                    success: false,
+                    message:
+                        error.response.data.error
+                            ? error.response.data.error
+                            : error.response.data.message
+                }
             return {
                 success: false,
                 message:
-                    error.response.data.error === null
-                        ? error.response.data.message
-                        : error.response.data.error
+                    error.message ? error.message : "Error when login"
             }
         }
     }
