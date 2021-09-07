@@ -1,5 +1,5 @@
 import useAuth, { ProtectRoute } from "@auth";
-import { Button, IconButton, InputAdornment, makeStyles, Snackbar, TextField, Typography } from "@material-ui/core";
+import { Button, CircularProgress, IconButton, InputAdornment, makeStyles, Snackbar, TextField, Typography } from "@material-ui/core";
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Alert, Color } from "@material-ui/lab";
@@ -34,6 +34,7 @@ const LoginPage = () => {
     const [msg, setMessage] = useState<string>('');
     const [severity, setSeverity] = useState<Color>('success');
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [loadingLogin, setLoadingLogin] = useState<boolean>(false);
 
     const handleChangeEmail = () => (
         event: ChangeEvent<HTMLInputElement>
@@ -43,15 +44,17 @@ const LoginPage = () => {
     ) => setPassword(event.target.value)
     const handleSubmit = async () => {
         if (email === '' || password === '') {
-            openSnackbar('warning', 'email and password is required')
+            openSnackbar('warning', 'Email and password is required')
         } else {
+            setLoadingLogin(true)
             const result = await login(
                 email.trim(),
                 password.trim()
             )
-            if (!result.success) {
-                openSnackbar('error', result.message)
-            }
+            !result.success
+                ? openSnackbar('error', result.message)
+                : openSnackbar('success', 'Login success')
+            setLoadingLogin(false)
         }
     }
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -117,16 +120,19 @@ const LoginPage = () => {
                         )
                     }}
                 />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    onClick={handleSubmit}
-                    fullWidth
-                    className={classes.formButton}
-                >
-                    Login
-                </Button>
+                {loadingLogin
+                    ? <CircularProgress style={{ margin: '0 auto', display: 'table' }} />
+                    : <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        onClick={handleSubmit}
+                        fullWidth
+                        className={classes.formButton}
+                    >
+                        Login
+                    </Button>
+                }
             </form>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleClose} severity={severity}>
