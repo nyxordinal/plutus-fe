@@ -81,7 +81,7 @@ const headCells: HeadCell[] = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
     { id: 'date', numeric: true, disablePadding: false, label: 'Date' },
-    { id: 'typeId', numeric: true, disablePadding: false, label: 'Type' },
+    { id: 'type', numeric: true, disablePadding: false, label: 'Type' },
 ];
 
 function ExpenseTableHead(props: ExpenseTableHeadProps) {
@@ -187,7 +187,7 @@ const ExpenseTableToolbar = (props: ExpenseTableToolbarProps) => {
     const [updateData, setUpdateData] = useLocalStorage<Expense>('updateDataExpense', {
         id: 0,
         name: "",
-        typeId: 0,
+        type: 0,
         price: 0,
         date: new Date(),
     })
@@ -434,7 +434,7 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
                                                 </TableCell>
                                                 <TableCell align="right">{currencyFormatter.format(row.price)}</TableCell>
                                                 <TableCell align="right">{formatDateSimple(row.date)}</TableCell>
-                                                <TableCell align="right">{EXPENSE_TYPE[row.typeId]}</TableCell>
+                                                <TableCell align="right">{EXPENSE_TYPE[row.type]}</TableCell>
                                             </TableRow>
                                         );
                                     })}

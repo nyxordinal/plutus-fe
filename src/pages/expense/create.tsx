@@ -27,7 +27,7 @@ const ExpenseCreatePage = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [name, setName] = useState<string>('');
-    const [typeId, setTypeId] = useState<number>(1);
+    const [type, setType] = useState<number>(1);
     const [price, setPrice] = useState<number>(0);
     const [date, setDate] = useState<Date>(new Date());
     const [severity, setSeverity] = useState<Color>('success');
@@ -43,7 +43,7 @@ const ExpenseCreatePage = () => {
         const create = async () => {
             const result = await createExpense({
                 name,
-                type_id: typeId,
+                type,
                 price,
                 date: formatDateSimple(date)
             })
@@ -63,7 +63,7 @@ const ExpenseCreatePage = () => {
         setOpen(true)
     }
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value);
-    const handleTypeIdChange = (event: React.ChangeEvent<HTMLInputElement>) => setTypeId(parseInt(event.target.value, 10));
+    const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => setType(parseInt(event.target.value, 10));
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         isNaN(parseInt(event.target.value, 10))
             ? setPrice(0)
@@ -101,8 +101,8 @@ const ExpenseCreatePage = () => {
                                         id="type-id"
                                         label="Expense Type"
                                         variant="outlined"
-                                        value={typeId}
-                                        onChange={handleTypeIdChange}
+                                        value={type}
+                                        onChange={handleTypeChange}
                                         fullWidth
                                     >
                                         {expenseType.map((option) => (

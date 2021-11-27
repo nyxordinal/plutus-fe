@@ -26,7 +26,7 @@ export interface LoginResponse {
 export interface ExpenseResponseItem {
     id: number
     name: string
-    type_id: number
+    type: number
     price: number
     date: string
 }

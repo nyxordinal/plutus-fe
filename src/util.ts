@@ -92,3 +92,17 @@ export const currencyFormatter = new Intl.NumberFormat('ID', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
 })
+
+/**
+ * Log message from error response
+ * @param {Error} error - error
+ * @returns {String} error message
+ */
+export const logErrorResponse = (error: any): string => {
+    // TODO: make to show up a snackbar everytime the API call return an error response
+    console.log(error)
+
+    let message: string = ''
+    error instanceof Error ? message = error.message : message = error
+    return message
+}

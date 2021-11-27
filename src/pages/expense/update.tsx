@@ -28,21 +28,21 @@ const ExpenseUpdatePage = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [name, setName] = useState<string>('');
-    const [typeId, setTypeId] = useState<number>(1);
+    const [type, setType] = useState<number>(1);
     const [price, setPrice] = useState<number>(0);
     const [date, setDate] = useState<Date>(new Date());
     const [severity, setSeverity] = useState<Color>('success');
     const [updateData, setUpdateData] = useLocalStorage<Expense>('updateDataExpense', {
         id: 0,
         name: "",
-        typeId: 0,
+        type: 0,
         price: 0,
         date: new Date(),
     })
 
     useEffect(() => {
         setName(updateData.name)
-        setTypeId(updateData.typeId)
+        setType(updateData.type)
         setPrice(updateData.price)
         setDate(new Date(updateData.date))
     }, [])
@@ -59,7 +59,7 @@ const ExpenseUpdatePage = () => {
             const result = await updateExpense({
                 id: updateData.id,
                 name,
-                typeId,
+                type,
                 price,
                 date
             })
@@ -67,7 +67,7 @@ const ExpenseUpdatePage = () => {
                 setUpdateData({
                     id: 0,
                     name: "",
-                    typeId: 0,
+                    type: 0,
                     price: 0,
                     date: new Date(),
                 })
@@ -86,7 +86,7 @@ const ExpenseUpdatePage = () => {
         setOpen(true)
     }
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value);
-    const handleTypeIdChange = (event: React.ChangeEvent<HTMLInputElement>) => setTypeId(parseInt(event.target.value, 10));
+    const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => setType(parseInt(event.target.value, 10));
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         isNaN(parseInt(event.target.value, 10))
             ? setPrice(0)
@@ -124,8 +124,8 @@ const ExpenseUpdatePage = () => {
                                         id="type-id"
                                         label="Expense Type"
                                         variant="outlined"
-                                        value={typeId}
-                                        onChange={handleTypeIdChange}
+                                        value={type}
+                                        onChange={handleTypeChange}
                                         fullWidth
                                     >
                                         {expenseType.map((option) => (
