@@ -26,8 +26,11 @@ const handleResponseReceive = (response: AxiosResponse) => {
     return response.data
 }
 
-const handleResponseError = (error: AxiosError) => {
-    return error.response ? error.response.data : error
+const handleResponseError = (errorResp: AxiosError) => {
+    if (errorResp.response)
+        throw new Error(errorResp.response.data.message)
+    else
+        throw new Error("there is an error")
 }
 
 export const API: AxiosInstance = axios.create({

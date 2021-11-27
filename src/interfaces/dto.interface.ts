@@ -9,7 +9,7 @@ export interface GetAllExpenseServiceResult {
 
 export interface CreateExpenseInterface {
     name: string
-    type_id: number
+    type: number
     price: number
     date: string
 }

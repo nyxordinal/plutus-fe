@@ -1,8 +1,7 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "@interface/constant";
 import { CreateIncomeInterface, GetAllIncomeServiceResult } from "@interface/dto.interface";
 import { Income, Summary } from "@interface/entity.interface";
 import { APIResponse, IncomeResponse, IncomeResponseItem, ServiceResponse, SummaryResponse } from "@interface/http.interface";
-import { formatDateSimple } from "@util";
+import { formatDateSimple, logErrorResponse } from "@util";
 import { API } from "api";
 
 const getAllIncomesQuery = (page: number, dataPerPage: number): string => {
@@ -16,8 +15,8 @@ const getAllIncomesQuery = (page: number, dataPerPage: number): string => {
     return query
 }
 export const getAllIncomes = async (page: number, dataPerPage: number): Promise<GetAllIncomeServiceResult> => {
-    const r: APIResponse<IncomeResponse> = await API.get(getAllIncomesQuery(page, dataPerPage))
-    if (r.code === HTTP_STATUS_OK) {
+    try {
+        const r: APIResponse<IncomeResponse> = await API.get(getAllIncomesQuery(page, dataPerPage))
         const { data, total } = r.data as IncomeResponse
         const incomeData: Income[] = data.map((income) => {
             return {
@@ -28,13 +27,15 @@ export const getAllIncomes = async (page: number, dataPerPage: number): Promise<
             }
         })
         return { incomeData, totalData: total }
+    } catch (error) {
+        logErrorResponse(error)
+        return { incomeData: [], totalData: 0 }
     }
-    return { incomeData: [], totalData: 0 }
 }
 
 export const getIncomeSummary = async (): Promise<Summary[]> => {
-    const r: APIResponse<SummaryResponse[]> = await API.get('/income/summary')
-    if (r.code === HTTP_STATUS_OK) {
+    try {
+        const r: APIResponse<SummaryResponse[]> = await API.get('/income/summary')
         const responseData = r.data as SummaryResponse[]
         const data: Summary[] = responseData.map((expenseSummary) => {
             return {
@@ -43,42 +44,48 @@ export const getIncomeSummary = async (): Promise<Summary[]> => {
             }
         })
         return data
+    } catch (error) {
+        logErrorResponse(error)
+        return []
     }
-    return []
 }
 
 export const createIncome = async (
     income: CreateIncomeInterface,
 ): Promise<ServiceResponse> => {
-    const r: APIResponse<null> = await API.post('/income', income)
-
-    if (r.code === HTTP_STATUS_CREATED) return { success: true, message: r.message }
-    return { success: false, message: r.error as string }
+    try {
+        const r: APIResponse<null> = await API.post('/income', income)
+        return { success: true, message: r.message }
+    } catch (error) {
+        return { success: false, message: logErrorResponse(error) }
+    }
 }
 
 export const updateIncome = async (
     updateData: Income,
 ): Promise<ServiceResponse> => {
-    let newDate: any = updateData.date
-
-    const data: IncomeResponseItem = {
-        id: updateData.id,
-        source: updateData.source,
-        amount: updateData.amount,
-        date: formatDateSimple(newDate)
+    try {
+        let newDate: any = updateData.date
+        const data: IncomeResponseItem = {
+            id: updateData.id,
+            source: updateData.source,
+            amount: updateData.amount,
+            date: formatDateSimple(newDate)
+        }
+        const r: APIResponse<null> = await API.put('/income', data)
+        return { success: true, message: r.message }
+    } catch (error) {
+        return { success: false, message: logErrorResponse(error) }
     }
-
-    const r: APIResponse<null> = await API.put('/income', data)
-
-    if (r.code === HTTP_STATUS_OK) return { success: true, message: r.message }
-    return { success: false, message: r.error as string }
 }
 
 export const deleteBulkIncome = async (
     ids: number[]
 ): Promise<ServiceResponse> => {
-    const r: APIResponse<null> = await API.post('/income/delete/bulk', { ids })
-
-    if (r.code === HTTP_STATUS_OK) return { success: true, message: r.message }
-    return { success: false, message: r.message }
+    try {
+        const r: APIResponse<null> = await API.post('/income/delete/bulk', { ids })
+        return { success: true, message: r.message }
+    } catch (error) {
+        return { success: false, message: logErrorResponse(error) }
+    }
 }

@@ -7,7 +7,7 @@ export interface User {
 export interface Expense {
     id: number
     name: string
-    typeId: number
+    type: number
     price: number
     date: Date
 }
