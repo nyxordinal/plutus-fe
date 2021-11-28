@@ -26,10 +26,11 @@ export const getAllExpenses = async (params: GetAllExpenseServiceInterface): Pro
         const r: APIResponse<ExpenseResponse> = await API.get(getAllExpensesQuery(params))
         const { data, total } = r.data as ExpenseResponse
         const expenseData: Expense[] = data.map((expense) => {
+            const originType: any = expense.type
             return {
                 id: expense.id,
                 name: expense.name,
-                type: expense.type,
+                type: typeof originType === 'string' ? parseInt(originType, 10) : originType,
                 price: expense.price,
                 date: new Date(expense.date)
             }
