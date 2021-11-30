@@ -2,7 +2,7 @@ import useAuth, { ProtectRoute } from '@auth';
 import ExpenseTable from '@components/ExpenseTable';
 import Layout from '@components/layout';
 import Loader from '@components/loader';
-import { DEFAULT_EXPENSE_SEARCH_VALUES, SEARCH_TGL_BUTTON_OFF_TEXT, SEARCH_TGL_BUTTON_ON_TEXT, TABLE_ROW_PER_PAGE_OPTION } from '@interface/constant';
+import { DEFAULT_EXPENSE_SEARCH_VALUES_NAME, SEARCH_TGL_BUTTON_OFF_TEXT, SEARCH_TGL_BUTTON_ON_TEXT, TABLE_ROW_PER_PAGE_OPTION } from '@interface/constant';
 import { Expense } from '@interface/entity.interface';
 import { Button, PropTypes } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -33,9 +33,9 @@ const ExpensePage = () => {
     const [expenses, setExpenses] = useState<Expense[]>([])
     const [loadingPage, setLoadingPage] = useState<boolean>(true)
     const [loadingData, setLoadingData] = useState<boolean>(true)
-    const [name, setName] = useState<string>(DEFAULT_EXPENSE_SEARCH_VALUES.name);
-    const [startDate, setStartDate] = useState<Date>(DEFAULT_EXPENSE_SEARCH_VALUES.startDate);
-    const [endDate, setEndDate] = useState<Date>(DEFAULT_EXPENSE_SEARCH_VALUES.endDate);
+    const [name, setName] = useState<string>(DEFAULT_EXPENSE_SEARCH_VALUES_NAME);
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [endDate, setEndDate] = useState<Date>(new Date());
     const [page, setPage] = useState<number>(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(TABLE_ROW_PER_PAGE_OPTION[0]);
     const [searchMode, setSearchMode] = useState<boolean>(false);
@@ -93,9 +93,9 @@ const ExpensePage = () => {
         searchMode ? setTglBtnColor('primary') : setTglBtnColor('default')
         searchMode ? setTglBtnText(SEARCH_TGL_BUTTON_ON_TEXT) : setTglBtnText(SEARCH_TGL_BUTTON_OFF_TEXT)
         setSearchMode(!searchMode)
-        setName(DEFAULT_EXPENSE_SEARCH_VALUES.name)
-        setStartDate(DEFAULT_EXPENSE_SEARCH_VALUES.startDate)
-        setEndDate(DEFAULT_EXPENSE_SEARCH_VALUES.endDate)
+        setName(DEFAULT_EXPENSE_SEARCH_VALUES_NAME)
+        setStartDate(new Date())
+        setEndDate(new Date())
     }
 
     return !isAuthenticated ? (
