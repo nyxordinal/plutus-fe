@@ -29,6 +29,8 @@ import { currencyFormatter, formatDateSimple, useLocalStorage } from '@util';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
+import { setIncomeMessage } from 'redux/general';
+import { useAppDispatch } from 'redux/hooks';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -169,7 +171,7 @@ interface IncomeTableToolbarProps {
     selected: number[],
     selectedIncomes: Income[],
     onOpenSnackbar: (type: Color, message: string) => void
-    onRefreshData: (page: number, turnOffLoading: boolean) => Promise<void>
+    onRefreshData: (page: number) => Promise<void>
     setSelectedItems: Dispatch<SetStateAction<number[]>>
 }
 
@@ -204,7 +206,7 @@ const IncomeTableToolbar = (props: IncomeTableToolbarProps) => {
     const handleDeleteClick = async () => {
         const result = await deleteBulkIncome(selected)
         if (result.success) {
-            await onRefreshData(1, false)
+            await onRefreshData(1)
             setSelectedItems([])
             onOpenSnackbar('success', 'Delete incomes success')
         }
@@ -286,7 +288,7 @@ type IncomeTableProps = {
     loadingData: boolean
     handleChangePage: (event: unknown, newPage: number) => void
     handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
-    handleRefreshData: (page: number, turnOffLoading: boolean) => Promise<void>
+    handleRefreshData: (page: number) => Promise<void>
 }
 
 export const IncomeTable = (props: IncomeTableProps) => {
@@ -302,6 +304,8 @@ export const IncomeTable = (props: IncomeTableProps) => {
         handleChangeRowsPerPage,
         handleRefreshData
     } = props
+
+    const dispatch = useAppDispatch()
 
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
@@ -370,6 +374,7 @@ export const IncomeTable = (props: IncomeTableProps) => {
             return;
         }
         setOpen(false);
+        dispatch(setIncomeMessage(''))
     };
 
     return (

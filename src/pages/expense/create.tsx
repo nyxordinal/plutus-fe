@@ -9,6 +9,8 @@ import { createExpense } from '@services/expense.service';
 import { enumToArray, formatDateSimple } from '@util';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
+import { setExpenseMessage } from 'redux/general';
+import { useAppDispatch } from 'redux/hooks';
 
 const expenseType = enumToArray(EXPENSE_TYPE)
 
@@ -24,6 +26,9 @@ const ExpenseCreatePage = () => {
     const { isAuthenticated } = useAuth()
     const router = useRouter()
     const classes = useStyles();
+
+    const dispatch = useAppDispatch()
+
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [name, setName] = useState<string>('');
@@ -48,10 +53,8 @@ const ExpenseCreatePage = () => {
                 date: formatDateSimple(date)
             })
             if (result.success) {
-                router.push({
-                    pathname: '/expense',
-                    query: { msg: result.message },
-                })
+                dispatch(setExpenseMessage(result.message))
+                router.push('/expense')
             }
             else openSnackbar('error', result.message)
         }

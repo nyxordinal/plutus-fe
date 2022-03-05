@@ -30,6 +30,8 @@ import { currencyFormatter, formatDateSimple, useLocalStorage } from '@util';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
+import { setExpenseMessage } from 'redux/general';
+import { useAppDispatch } from 'redux/hooks';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -171,7 +173,7 @@ interface ExpenseTableToolbarProps {
     selected: number[],
     selectedExpenses: Expense[],
     onOpenSnackbar: (type: Color, message: string) => void
-    onRefreshData: (page: number, turnOffLoading: boolean) => Promise<void>
+    onRefreshData: (page: number) => Promise<void>
     setSelectedItems: Dispatch<SetStateAction<number[]>>
 }
 
@@ -207,7 +209,7 @@ const ExpenseTableToolbar = (props: ExpenseTableToolbarProps) => {
     const handleDeleteClick = async () => {
         const result = await deleteBulkExpense(selected)
         if (result.success) {
-            await onRefreshData(1, false)
+            await onRefreshData(1)
             setSelectedItems([])
             onOpenSnackbar('success', 'Delete expenses success')
         }
@@ -289,7 +291,7 @@ type ExpenseTableProps = {
     loadingData: boolean
     handleChangePage: (event: unknown, newPage: number) => void
     handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void
-    handleRefreshData: (page: number, turnOffLoading: boolean) => Promise<void>
+    handleRefreshData: (page: number) => Promise<void>
 }
 
 export const ExpenseTable = (props: ExpenseTableProps) => {
@@ -305,6 +307,8 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
         handleChangeRowsPerPage,
         handleRefreshData
     } = props
+
+    const dispatch = useAppDispatch()
 
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
@@ -373,6 +377,8 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
             return;
         }
         setOpen(false);
+
+        dispatch(setExpenseMessage(''))
     };
 
     return (

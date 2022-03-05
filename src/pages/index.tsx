@@ -8,6 +8,9 @@ import { getIncomeSummary } from '@services/income.service';
 import { currencyFormatter, formatDateShort } from '@util';
 import MaterialTable, { Column } from 'material-table';
 import { Fragment, useEffect, useState } from 'react';
+import { getExpenseSummaryState, setExpenseSummary } from 'redux/expense';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { getIncomeSummaryState, setIncomeSummary } from 'redux/income';
 
 const useStyles = makeStyles({
   box: {
@@ -29,7 +32,6 @@ const columnExpense: Column<Summary>[] = [
     render: rowData => currencyFormatter.format(rowData.amount)
   },
 ]
-
 const columnIncome: Column<Summary>[] = [
   {
     title: 'Year Month',
@@ -48,16 +50,18 @@ const columnIncome: Column<Summary>[] = [
 const IndexPage = () => {
   const { isAuthenticated } = useAuth()
   const classes = useStyles()
-  const [expenseSummary, setExpenseSummary] = useState<Summary[]>([])
-  const [incomeSummary, setIncomeSummary] = useState<Summary[]>([])
+
+  const dispatch = useAppDispatch()
+  const expenseSummary = useAppSelector(getExpenseSummaryState).map(o => ({ ...o }))
+  const incomeSummary = useAppSelector(getIncomeSummaryState).map(o => ({ ...o }))
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       const expensesData = await getExpenseSummary()
       const incomesData = await getIncomeSummary()
-      setExpenseSummary(expensesData)
-      setIncomeSummary(incomesData)
+      dispatch(setExpenseSummary(expensesData))
+      dispatch(setIncomeSummary(incomesData))
       setLoading(false)
     }
     if (isAuthenticated) fetchData()

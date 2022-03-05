@@ -3,52 +3,47 @@ import IncomeTable from '@components/IncomeTable';
 import Layout from '@components/layout';
 import Loader from '@components/loader';
 import { TABLE_ROW_PER_PAGE_OPTION } from '@interface/constant';
-import { Income } from '@interface/entity.interface';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { getAllIncomes } from '@services/income.service';
-import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
+import { getIncomeMsgState } from 'redux/general';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { getIncomeState, setIncome } from 'redux/income';
 
 const IncomePage = () => {
     const { isAuthenticated } = useAuth()
-    const router = useRouter()
 
-    const [updateAlertMsg, setUpdateAlertMsg] = useState<string>('');
+    const dispatch = useAppDispatch()
+    const incomes = useAppSelector(getIncomeState)
+    const updateAlertMsg = useAppSelector(getIncomeMsgState)
+
     const [totalData, setTotalData] = useState<number>(0);
-    const [incomes, setIncomes] = useState<Income[]>([])
     const [loadingPage, setLoadingPage] = useState<boolean>(true)
     const [loadingData, setLoadingData] = useState<boolean>(true)
     const [page, setPage] = useState<number>(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(TABLE_ROW_PER_PAGE_OPTION[0]);
 
-    const fetchData = async (page: number, turnOffLoadingData = false) => {
+    const fetchData = async (page: number) => {
+        setLoadingData(true)
         const { incomeData, totalData } = await getAllIncomes(page, rowsPerPage)
         if (incomeData.length < 1 && totalData == 0 && page > 0) {
             setPage(0)
         }
-        setIncomes(incomeData)
+        dispatch(setIncome(incomeData))
         setTotalData(totalData)
-        if (turnOffLoadingData) setLoadingData(false)
+        setLoadingData(false)
     }
 
     useEffect(() => {
         if (isAuthenticated) {
-            fetchData(page + 1, true)
-            if (router.query.msg != undefined && router.query.msg?.length != 0)
-                setUpdateAlertMsg(router.query.msg as string)
-            setLoadingPage(false)
+            fetchData(page + 1)
+            if (loadingPage) setLoadingPage(false)
         }
-    }, [isAuthenticated]);
-
-    useEffect(() => {
-        setLoadingData(true)
-        fetchData(page + 1, true)
-    }, [rowsPerPage]);
+    }, [isAuthenticated, rowsPerPage]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
-        setLoadingData(true)
-        fetchData(newPage + 1, true)
+        fetchData(newPage + 1)
         setPage(newPage)
     };
 
