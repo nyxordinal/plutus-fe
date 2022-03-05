@@ -10,6 +10,8 @@ import { updateExpense } from '@services/expense.service';
 import { enumToArray, formatDateSimple, useLocalStorage } from '@util';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
+import { setExpenseMessage } from 'redux/general';
+import { useAppDispatch } from 'redux/hooks';
 
 const expenseType = enumToArray(EXPENSE_TYPE)
 
@@ -25,6 +27,9 @@ const ExpenseUpdatePage = () => {
     const { isAuthenticated } = useAuth()
     const router = useRouter()
     const classes = useStyles();
+
+    const dispatch = useAppDispatch()
+
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [name, setName] = useState<string>('');
@@ -71,10 +76,8 @@ const ExpenseUpdatePage = () => {
                     price: 0,
                     date: new Date(),
                 })
-                router.push({
-                    pathname: '/expense',
-                    query: { msg: result.message },
-                })
+                dispatch(setExpenseMessage(result.message))
+                router.push('/expense')
             }
             else openSnackbar('error', result.message)
         }

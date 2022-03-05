@@ -9,6 +9,8 @@ import { updateIncome } from '@services/income.service';
 import { formatDateSimple, useLocalStorage } from '@util';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
+import { setIncomeMessage } from 'redux/general';
+import { useAppDispatch } from 'redux/hooks';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,6 +25,9 @@ const IncomeUpdatePage = () => {
     const { isAuthenticated } = useAuth()
     const router = useRouter()
     const classes = useStyles();
+
+    const dispatch = useAppDispatch()
+
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [source, setSource] = useState<string>('');
@@ -64,10 +69,8 @@ const IncomeUpdatePage = () => {
                     amount: 0,
                     date: new Date(),
                 })
-                router.push({
-                    pathname: '/income',
-                    query: { msg: result.message },
-                })
+                dispatch(setIncomeMessage(result.message))
+                router.push('/income')
             }
             else openSnackbar('error', result.message)
         }

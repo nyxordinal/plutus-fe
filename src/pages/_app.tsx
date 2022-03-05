@@ -4,6 +4,8 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Fragment } from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 const theme = createTheme({
     palette: {
@@ -24,11 +26,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
+                <link rel="shortcut icon" href="/favicon.ico" />
                 <title>Plutus</title>
             </Head>
             <ThemeProvider theme={theme}>
                 <AuthProvider>
-                    <Component {...pageProps} />
+                    <Provider store={store} >
+                        <Component {...pageProps} />
+                    </Provider>
                 </AuthProvider>
             </ThemeProvider>
         </Fragment>
