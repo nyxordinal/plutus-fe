@@ -10,8 +10,10 @@ import {
     setTokenCookie,
     setUserCookie
 } from '@services/cookie.service'
+import { getUTCTimestamp } from '@util'
 import { AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
+import NodeRSA from 'node-rsa'
 import {
     ComponentType,
     createContext,
@@ -60,6 +62,9 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
     const [user, setUser] = useState<User>(DefaultUser)
     const [loading, setLoading] = useState(true)
 
+    const publicKey: string = process.env.NEXT_PUBLIC_KEY || ''
+    const RSAEncrypter: NodeRSA = new NodeRSA(publicKey)
+
     useEffect(() => {
         async function loadUserFromCookies() {
             const token = getTokenCookie()
@@ -72,22 +77,27 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
         loadUserFromCookies()
     }, [])
 
+    const encryptPayload = (password: string, serverTimestamp: number): string => {
+        return RSAEncrypter.encrypt(`${password}:${serverTimestamp}`, 'base64')
+    }
+
     const login = async (
         email: string,
         password: string
     ): Promise<ServiceResponse> => {
         // Login user
         try {
-            const {
-                data,
-                headers,
-                status
-            }: AxiosResponse<APIResponse<LoginResponse>> = await AuthAPI.post('/auth/login', {
+            // get server timestamp
+            const resp: AxiosResponse<APIResponse<number>> = await AuthAPI.get('/login-state')
+
+            // encrypt payload
+            const encPassword = encryptPayload(password, resp.data.data || getUTCTimestamp())
+
+            const { headers, data }: AxiosResponse<APIResponse<LoginResponse>> = await AuthAPI.post('/auth/login', {
                 email,
-                password
+                enc_password: encPassword
             })
-            const { data: userData } = data
-            const loginResponse = userData as LoginResponse
+            const loginResponse = data.data as LoginResponse
             const user: User = {
                 id: loginResponse.id || 0,
                 name: loginResponse.name,
