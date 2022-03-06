@@ -106,3 +106,9 @@ export const logErrorResponse = (error: any): string => {
     error instanceof Error ? message = error.message : message = error
     return message
 }
+
+/**
+ * Get current UNIX Timestamp in UTC
+ * @returns {number} UNIX timestamp
+ */
+export const getUTCTimestamp = (): number => Math.floor(Date.now() / 1000)
