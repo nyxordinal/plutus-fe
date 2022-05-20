@@ -1,3 +1,4 @@
+import { MAIL_FORMAT } from "@interface/constant";
 import { useState } from "react";
 
 /**
@@ -112,3 +113,10 @@ export const logErrorResponse = (error: any): string => {
  * @returns {number} UNIX timestamp
  */
 export const getUTCTimestamp = (): number => Math.floor(Date.now() / 1000)
+
+/**
+ * Validate a string is email or not
+ * @param {string} inputText - the text that will be validated
+ * @returns {boolean} true if the text is an email and vice versa
+ */
+export const ValidateEmail = (inputText: string): Boolean => !!inputText.match(MAIL_FORMAT)

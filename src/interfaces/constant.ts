@@ -8,3 +8,5 @@ export const SEARCH_TGL_BUTTON_OFF_TEXT = 'Turn Off Search'
 export const DEFAULT_EXPENSE_SEARCH_VALUES_NAME = ''
 
 export const TABLE_ROW_PER_PAGE_OPTION = [5, 10, 25]
+
+export const MAIL_FORMAT = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

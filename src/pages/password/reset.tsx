@@ -1,9 +1,9 @@
-import useAuth, { ProtectRoute } from "@auth";
-import { Button, CircularProgress, Divider, IconButton, InputAdornment, makeStyles, Snackbar, TextField, Typography } from "@material-ui/core";
+import { Button, CircularProgress, IconButton, InputAdornment, makeStyles, Snackbar, TextField, Typography } from "@material-ui/core";
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Alert, Color } from "@material-ui/lab";
-import Link from "next/link";
+import { resetPassword } from "@services/password.service";
+import { useRouter } from "next/router";
 import { ChangeEvent, MouseEvent, useState } from "react";
 
 const useStyles = makeStyles({
@@ -23,47 +23,49 @@ const useStyles = makeStyles({
     },
     formButton: {
         marginTop: '5px'
-    },
-    circularProgress: {
-        margin: '0 auto',
-        display: 'table'
-    },
-    divider: {
-        marginTop: '16px',
-        marginBottom: '8px'
     }
 })
 
-const LoginPage = () => {
-    const { login } = useAuth()
+const ResetPasswordPage = () => {
     const classes = useStyles()
-    const [email, setEmail] = useState<string>('')
+    const router = useRouter()
+    const query = router.query
     const [password, setPassword] = useState<string>('')
+    const [passwordConfirm, setPasswordConfirm] = useState<string>('')
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [severity, setSeverity] = useState<Color>('success');
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [loadingLogin, setLoadingLogin] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const handleChangeEmail = () => (
-        event: ChangeEvent<HTMLInputElement>
-    ) => setEmail(event.target.value)
     const handleChangePassword = () => (
         event: ChangeEvent<HTMLInputElement>
     ) => setPassword(event.target.value)
+    const handleChangePasswordConfirm = () => (
+        event: ChangeEvent<HTMLInputElement>
+    ) => setPasswordConfirm(event.target.value)
     const handleSubmit = async () => {
-        if (email === '' || password === '') {
-            openSnackbar('warning', 'Email and password is required')
+        if (!query['email'] || !query['reset-token']) {
+            openSnackbar('error', 'Something is wrong, please reopen the password reset link in your email')
+        } else if (password === '' || passwordConfirm === '') {
+            openSnackbar('warning', 'Password and password confirmation are required')
+        } else if (password !== passwordConfirm) {
+            openSnackbar('warning', 'Password and password confirmation are not the same')
+        } else if (password.length < 8) {
+            openSnackbar('warning', 'Minimum password length is 8 characters')
         } else {
-            setLoadingLogin(true)
-            const result = await login(
-                email.trim(),
-                password.trim()
-            )
-            !result.success
-                ? openSnackbar('error', result.message)
-                : openSnackbar('success', 'Login success')
-            setLoadingLogin(false)
+            setLoading(true)
+            const result = await resetPassword(query["email"] as string, query["reset-token"] as string, password)
+            if (result.success) {
+                openSnackbar('success', 'Reset password success, you will be redirected to login page')
+                setLoading(false)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 5000);
+            } else {
+                setLoading(false)
+                openSnackbar('error', result.message)
+            }
         }
     }
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -86,19 +88,10 @@ const LoginPage = () => {
     return (
         <div className={classes.base}>
             <form className={classes.form} noValidate autoComplete="off">
-                <Typography variant="h4" align="center" gutterBottom>Plutus</Typography>
-                <TextField
-                    id="email"
-                    label="Email"
-                    value={email}
-                    fullWidth
-                    onChange={handleChangeEmail()}
-                    variant='outlined'
-                    required
-                />
+                <Typography variant="h5" align="center" gutterBottom>Plutus | Reset Password</Typography>
                 <TextField
                     id="password"
-                    label="Password"
+                    label="New Password"
                     value={password}
                     fullWidth
                     onChange={handleChangePassword()}
@@ -129,9 +122,41 @@ const LoginPage = () => {
                         )
                     }}
                 />
-                <Typography variant="subtitle1" align="left" gutterBottom><Link href={"/password/forgot"}>Forgot password?</Link></Typography>
-                {loadingLogin
-                    ? <CircularProgress className={classes.circularProgress} />
+                <TextField
+                    id="password-confirmation"
+                    label="Password Confirmation"
+                    value={passwordConfirm}
+                    fullWidth
+                    onChange={handleChangePasswordConfirm()}
+                    variant='outlined'
+                    margin='normal'
+                    required
+                    type={
+                        showPassword
+                            ? 'text'
+                            : 'password'
+                    }
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? (
+                                        <Visibility />
+                                    ) : (
+                                        <VisibilityOff />
+                                    )}
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }}
+                />
+                {loading
+                    ? <CircularProgress style={{ margin: '0 auto', display: 'table' }} />
                     : <Button
                         variant="contained"
                         color="primary"
@@ -140,11 +165,9 @@ const LoginPage = () => {
                         fullWidth
                         className={classes.formButton}
                     >
-                        Login
+                        Reset Password
                     </Button>
                 }
-                <Divider className={classes.divider} />
-                <Typography variant="subtitle1" align="center">New to Plutus? <Link href={"/register"}>Create an account</Link></Typography>
             </form>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleClose} severity={severity}>
@@ -154,4 +177,5 @@ const LoginPage = () => {
         </div>
     )
 }
-export default ProtectRoute(LoginPage, true)
+
+export default ResetPasswordPage

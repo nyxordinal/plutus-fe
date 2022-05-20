@@ -12,8 +12,8 @@ import {
 } from '@services/cookie.service'
 import { getUTCTimestamp } from '@util'
 import { AxiosResponse } from 'axios'
+import { encryptPayload } from 'encryptor'
 import { useRouter } from 'next/router'
-import NodeRSA from 'node-rsa'
 import {
     ComponentType,
     createContext,
@@ -35,6 +35,7 @@ type AuthContextType = {
     user: User
     login: (username: string, password: string) => Promise<ServiceResponse>
     logout: () => void
+    register: (name: string, email: string, password: string) => Promise<ServiceResponse>
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -55,15 +56,22 @@ const AuthContext = createContext<AuthContextType>({
         // This function is purposely left blank
         // because it is only used for
         // the createContext default value
+    },
+    register: async (name: string, email: string, password: string) => {
+        try {
+            if (!name && !email && !password) {
+                throw new Error('Register failed')
+            }
+            return { success: true, message: '' }
+        } catch (error: any) {
+            return { success: false, message: error.message }
+        }
     }
 })
 
 export const AuthProvider: FC<{ children: any }> = ({ children }) => {
     const [user, setUser] = useState<User>(DefaultUser)
     const [loading, setLoading] = useState(true)
-
-    const publicKey: string = process.env.NEXT_PUBLIC_KEY || ''
-    const RSAEncrypter: NodeRSA = new NodeRSA(publicKey)
 
     useEffect(() => {
         async function loadUserFromCookies() {
@@ -76,10 +84,6 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
         }
         loadUserFromCookies()
     }, [])
-
-    const encryptPayload = (password: string, serverTimestamp: number): string => {
-        return RSAEncrypter.encrypt(`${password}:${serverTimestamp}`, 'base64')
-    }
 
     const login = async (
         email: string,
@@ -135,9 +139,38 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
         window.location.pathname = '/login'
     }
 
+    const register = async (
+        name: string,
+        email: string,
+        password: string
+    ): Promise<ServiceResponse> => {
+        try {
+            const { data }: AxiosResponse<APIResponse<null>> = await AuthAPI.post('/auth/register', {
+                name,
+                email,
+                password
+            })
+            return { success: true, message: data.message }
+        } catch (error: any) {
+            if (error.response)
+                return {
+                    success: false,
+                    message:
+                        error.response.data.error
+                            ? error.response.data.error
+                            : error.response.data.message
+                }
+            return {
+                success: false,
+                message:
+                    error.message ? error.message : "Error when register"
+            }
+        }
+    }
+
     return (
         <AuthContext.Provider
-            value={{ isAuthenticated: !!user.id, user, login, loading, logout }}
+            value={{ isAuthenticated: !!user.id, user, login, loading, logout, register }}
         >
             {children}
         </AuthContext.Provider>
