@@ -12,7 +12,7 @@ export const getTokenCookie = (): string => {
 }
 
 export const setTokenCookie = (token = ''): void => {
-    Cookies.set(KEY_TOKEN, token, { expires: 1 })
+    Cookies.set(KEY_TOKEN, token, { expires: 3 })
 }
 
 export const removeTokenCookie = (): void => {
@@ -24,7 +24,7 @@ export const getUserCookie = (): string => {
 }
 
 export const setUserCookie = (user: User): void => {
-    Cookies.set(KEY_USER, JSON.stringify(user))
+    Cookies.set(KEY_USER, JSON.stringify(user), { expires: 3 })
 }
 
 export const removeUserCookie = (): void => {
