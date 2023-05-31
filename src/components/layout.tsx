@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -19,6 +19,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
+import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -160,6 +161,12 @@ const Layout = (props: PropType) => {
                             <ListItem button key='income'>
                                 <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
                                 <ListItemText primary="Income" />
+                            </ListItem>
+                        </Link>
+                        <Link href="/setting" passHref>
+                            <ListItem button key='setting'>
+                                <ListItemIcon><SettingsIcon /></ListItemIcon>
+                                <ListItemText primary="Setting" />
                             </ListItem>
                         </Link>
                         <ListItem button key='income'>

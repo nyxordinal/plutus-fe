@@ -1,3 +1,5 @@
+import { Settings } from "./entity.interface"
+
 export interface APIResponse<T> {
     code: number
     message: string
@@ -58,4 +60,8 @@ export interface IncomeResponse {
 export interface IncomeResponse {
     data: IncomeResponseItem[]
     total: number
+}
+
+export interface SettingsResponse {
+    settings: Settings
 }

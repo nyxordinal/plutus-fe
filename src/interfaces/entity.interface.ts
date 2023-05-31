@@ -23,3 +23,7 @@ export interface Summary {
     yearmonth: Date
     amount: number
 }
+
+export interface Settings {
+    expenseLimit: number
+}

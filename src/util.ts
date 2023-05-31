@@ -120,3 +120,43 @@ export const getUTCTimestamp = (): number => Math.floor(Date.now() / 1000)
  * @returns {boolean} true if the text is an email and vice versa
  */
 export const ValidateEmail = (inputText: string): Boolean => !!inputText.match(MAIL_FORMAT)
+
+/**
+ * Convert an object keys from snake case to camel case
+ * @param {unknown} o input object
+ * @returns {unknown} input object but in camel case
+ */
+export const snakeCaseKeysToCamelCase = function (o) {
+    if (isObject(o)) {
+        const n = {};
+
+        Object.keys(o)
+            .forEach((k) => {
+                n[toCamel(k)] = snakeCaseKeysToCamelCase(o[k]);
+            });
+
+        return n;
+    } else if (isArray(o)) {
+        return o.map((i) => {
+            return snakeCaseKeysToCamelCase(i);
+        });
+    }
+
+    return o;
+};
+
+const toCamel = (s) => {
+    return s.replace(/([-_][a-z])/ig, ($1) => {
+        return $1.toUpperCase()
+            .replace('-', '')
+            .replace('_', '');
+    });
+};
+
+const isArray = function (a) {
+    return Array.isArray(a);
+};
+
+const isObject = function (o) {
+    return o === Object(o) && !isArray(o) && typeof o !== 'function';
+};
