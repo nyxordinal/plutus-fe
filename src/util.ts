@@ -126,9 +126,9 @@ export const ValidateEmail = (inputText: string): Boolean => !!inputText.match(M
  * @param {unknown} o input object
  * @returns {unknown} input object but in camel case
  */
-export const snakeCaseKeysToCamelCase = function (o) {
+export const snakeCaseKeysToCamelCase = function (o: any) {
     if (isObject(o)) {
-        const n = {};
+        const n: any = {};
 
         Object.keys(o)
             .forEach((k) => {
@@ -137,7 +137,7 @@ export const snakeCaseKeysToCamelCase = function (o) {
 
         return n;
     } else if (isArray(o)) {
-        return o.map((i) => {
+        return o.map((i: any) => {
             return snakeCaseKeysToCamelCase(i);
         });
     }
@@ -145,18 +145,18 @@ export const snakeCaseKeysToCamelCase = function (o) {
     return o;
 };
 
-const toCamel = (s) => {
-    return s.replace(/([-_][a-z])/ig, ($1) => {
+const toCamel = (s: any) => {
+    return s.replace(/([-_][a-z])/ig, ($1: any) => {
         return $1.toUpperCase()
             .replace('-', '')
             .replace('_', '');
     });
 };
 
-const isArray = function (a) {
+const isArray = function (a: any) {
     return Array.isArray(a);
 };
 
-const isObject = function (o) {
+const isObject = function (o: any) {
     return o === Object(o) && !isArray(o) && typeof o !== 'function';
 };
