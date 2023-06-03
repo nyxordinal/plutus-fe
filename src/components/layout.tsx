@@ -166,7 +166,7 @@ const Layout = (props: PropType) => {
                         <Link href="/setting" passHref>
                             <ListItem button key='setting'>
                                 <ListItemIcon><SettingsIcon /></ListItemIcon>
-                                <ListItemText primary="Setting" />
+                                <ListItemText primary="Settings" />
                             </ListItem>
                         </Link>
                         <ListItem button key='income'>

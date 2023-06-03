@@ -77,7 +77,7 @@ const SetttingPage = () => {
                         {msg}
                     </Alert>
                 </Snackbar>
-                <Typography variant="h4" gutterBottom>Setting Page</Typography>
+                <Typography variant="h4" gutterBottom>Settings Page</Typography>
                 <div style={{ height: 800, width: '100%' }}>
                     {loadingPage ? (
                         <CircularProgress />
