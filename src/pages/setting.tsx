@@ -1,7 +1,7 @@
 import useAuth, { ProtectRoute } from '@auth';
 import Layout from '@components/layout';
 import Loader from '@components/loader';
-import { Button, Snackbar } from '@material-ui/core';
+import { Button, Divider, Snackbar } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +15,13 @@ const useStyles = makeStyles({
     settingsForm: {
         marginTop: '32px',
         marginBottom: '32px'
+    },
+    settingsFormBtn: {
+        marginBottom: '32px'
+    },
+    notificationSetting: {
+        marginTop: '32px',
+        marginBottom: '16px'
     }
 })
 
@@ -24,7 +31,9 @@ const SetttingPage = () => {
 
     const [loadingPage, setLoadingPage] = useState<boolean>(true)
     const [loadingButton, setLoadingButton] = useState<boolean>(false)
+    const [loadingNotifButton, setLoadingNotifButton] = useState<boolean>(false)
     const [expenseLimit, setExpenseLimit] = useState<string>('0.00');
+    const [lastNotifDate, setLastNotifDate] = useState<string>("");
     const [open, setOpen] = useState<boolean>(false);
     const [msg, setMessage] = useState<string>('');
     const [severity, setSeverity] = useState<Color>('success');
@@ -38,15 +47,17 @@ const SetttingPage = () => {
 
     const fetchData = async () => {
         setLoadingPage(true)
-        const { expenseLimit } = await getAllSettings()
+        const { expenseLimit, lastNotifDate } = await getAllSettings()
         setExpenseLimit(expenseLimit.toString())
+        setLastNotifDate(lastNotifDate)
     }
 
     const handleExpenseLimitChange = (event: React.ChangeEvent<HTMLInputElement>) => setExpenseLimit(parseFloat(event.target.value).toFixed(2));
     const handleSubmit = () => {
         const update = async () => {
             const result = await updateSettings({
-                expenseLimit: parseFloat(expenseLimit)
+                expenseLimit: parseFloat(expenseLimit),
+                isResetNotif: false
             })
             if (result.success) openSnackbar('success', result.message)
             else openSnackbar('error', result.message)
@@ -54,6 +65,19 @@ const SetttingPage = () => {
         setLoadingButton(true)
         update()
         setLoadingButton(false)
+    }
+    const handleNotifButtonClick = () => {
+        const resetNotif = async () => {
+            const result = await updateSettings({
+                expenseLimit: parseFloat(expenseLimit),
+                isResetNotif: true
+            })
+            if (result.success) openSnackbar('success', 'Notification reset successful')
+            else openSnackbar('error', result.message)
+        }
+        setLoadingNotifButton(true)
+        resetNotif()
+        setLoadingNotifButton(false)
     }
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {
@@ -109,7 +133,22 @@ const SetttingPage = () => {
                                     variant="contained"
                                     size="medium"
                                     color='primary'
+                                    className={classes.settingsFormBtn}
                                 >Save Settings</Button>}
+                            <Divider />
+                            <Grid container spacing={2} className={classes.notificationSetting}>
+                                <Grid item lg={3} md={6} xs={12} >
+                                    <Typography variant='h6'>Last Expense Limit Notification Date: {lastNotifDate}</Typography>
+                                    <Typography variant='subtitle2'>Resetting the notification will enable it to be sent again whenever you exceed your expense limit</Typography>
+                                </Grid>
+                            </Grid>
+                            {loadingNotifButton ? <CircularProgress />
+                                : <Button
+                                    onClick={handleNotifButtonClick}
+                                    variant="contained"
+                                    size="medium"
+                                    color='primary'
+                                >Reset Notification</Button>}
                         </Fragment>
                     )}
                 </div>

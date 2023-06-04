@@ -26,4 +26,5 @@ export interface Summary {
 
 export interface Settings {
     expenseLimit: number
+    lastNotifDate: string
 }

@@ -62,6 +62,11 @@ export interface IncomeResponse {
     total: number
 }
 
+export interface SettingsRequest {
+    expenseLimit: number
+    isResetNotif: boolean
+}
+
 export interface SettingsResponse {
     settings: Settings
 }
