@@ -317,7 +317,7 @@ export const ExpenseTable = (props: ExpenseTableProps) => {
     const [orderBy, setOrderBy] = useState<keyof Expense>('date');
     const [selected, setSelected] = useState<number[]>([]);
     const [selectedExpenses, setSelectedExpenses] = useState<Expense[]>([]);
-    const [dense, setDense] = useState(false);
+    const [dense, setDense] = useState(true);
 
     useEffect(() => {
         if (updateAlertMsg != undefined && updateAlertMsg.length != 0)

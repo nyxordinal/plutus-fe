@@ -314,7 +314,7 @@ export const IncomeTable = (props: IncomeTableProps) => {
     const [orderBy, setOrderBy] = useState<keyof Income>('date');
     const [selected, setSelected] = useState<number[]>([]);
     const [selectedIncomes, setSelectedIncomes] = useState<Income[]>([]);
-    const [dense, setDense] = useState(false);
+    const [dense, setDense] = useState(true);
 
     useEffect(() => {
         if (updateAlertMsg != undefined && updateAlertMsg.length != 0)
