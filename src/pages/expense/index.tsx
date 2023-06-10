@@ -39,7 +39,7 @@ const ExpensePage = () => {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [page, setPage] = useState<number>(0);
-    const [rowsPerPage, setRowsPerPage] = useState<number>(TABLE_ROW_PER_PAGE_OPTION[0]);
+    const [rowsPerPage, setRowsPerPage] = useState<number>(TABLE_ROW_PER_PAGE_OPTION[1]);
     const [searchMode, setSearchMode] = useState<boolean>(false);
     const [tglBtnColor, setTglBtnColor] = useState<PropTypes.Color>('primary');
     const [tglBtnText, setTglBtnText] = useState<string>('Turn On Search');

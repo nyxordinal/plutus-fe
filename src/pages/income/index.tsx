@@ -22,7 +22,7 @@ const IncomePage = () => {
     const [loadingPage, setLoadingPage] = useState<boolean>(true)
     const [loadingData, setLoadingData] = useState<boolean>(true)
     const [page, setPage] = useState<number>(0);
-    const [rowsPerPage, setRowsPerPage] = useState<number>(TABLE_ROW_PER_PAGE_OPTION[0]);
+    const [rowsPerPage, setRowsPerPage] = useState<number>(TABLE_ROW_PER_PAGE_OPTION[1]);
 
     const fetchData = async (page: number) => {
         setLoadingData(true)
