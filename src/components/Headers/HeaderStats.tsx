@@ -1,5 +1,6 @@
 import CardStats from "@component/Cards/CardStats";
 import { currencyFormatter } from "@util";
+import { useTranslation } from "locale/translator";
 import PropTypes from "prop-types";
 
 type PropType = {
@@ -15,6 +16,7 @@ const HeaderStats = ({
   incomeTotal,
   incomeAverage,
 }: PropType) => {
+  const { translate } = useTranslation()
   return (
     <>
       {/* Header */}
@@ -25,7 +27,7 @@ const HeaderStats = ({
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="TOTAL EXPENSE"
+                  statSubtitle={translate("totalExpense")}
                   statTitle={currencyFormatter.format(expenseTotal)}
                   statIconName="fas fa-dollar-sign"
                   statIconColor="bg-red-500"
@@ -33,7 +35,7 @@ const HeaderStats = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="AVG EXPENSE/MONTH"
+                  statSubtitle={translate("avgExpense")}
                   statTitle={currencyFormatter.format(expenseAverage)}
                   statIconName="fas fa-chart-pie"
                   statIconColor="bg-pink-500"
@@ -41,7 +43,7 @@ const HeaderStats = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="TOTAL INCOME"
+                  statSubtitle={translate("totalIncome")}
                   statTitle={currencyFormatter.format(incomeTotal)}
                   statIconName="fas fa-wallet"
                   statIconColor="bg-orange-500"
@@ -49,7 +51,7 @@ const HeaderStats = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="AVG INCOME/MONTH"
+                  statSubtitle={translate("avgIncome")}
                   statTitle={currencyFormatter.format(incomeAverage)}
                   statIconName="fas fa-chart-pie"
                   statIconColor="bg-lightBlue-500"

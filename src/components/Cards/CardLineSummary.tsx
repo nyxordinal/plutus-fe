@@ -115,9 +115,6 @@ const CardLineChartSummary = ({ id, title, data }: PropType) => {
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-                Overview
-              </h6>
               <h2 className="text-white text-xl font-semibold">{title}</h2>
             </div>
           </div>

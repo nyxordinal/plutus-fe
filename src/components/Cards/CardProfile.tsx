@@ -1,9 +1,12 @@
+import { useTranslation } from "locale/translator";
+
 type PropType = {
   name: string;
   logout: () => void
 };
 
 export default function CardProfile({ name, logout }: PropType) {
+  const { translate } = useTranslation()
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
@@ -28,7 +31,7 @@ export default function CardProfile({ name, logout }: PropType) {
               type="button"
               onClick={logout}
             >
-              Logout
+              {translate("logoutBtn")}
             </button>
           </div>
         </div>

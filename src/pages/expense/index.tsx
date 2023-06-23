@@ -12,6 +12,7 @@ import { GetAllExpenseServiceInterface } from "@interface/dto.interface";
 import Admin from "@layout/Admin";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { deleteBulkExpense, getAllExpenses } from "@service/expense.service";
+import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { getExpenseState, setExpense } from "redux/expense";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
@@ -20,6 +21,7 @@ const ExpensePage = () => {
   const { isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
   const expenses = useAppSelector(getExpenseState);
+  const { translate } = useTranslation()
 
   const [totalData, setTotalData] = useState<number>(0);
   const [loadingData, setLoadingData] = useState<boolean>(true);
@@ -131,7 +133,7 @@ const ExpensePage = () => {
   return !isAuthenticated ? (
     <Loader />
   ) : (
-    <Admin name="Expense" customUrl="/expense">
+    <Admin name={translate("expense")} customUrl="/expense">
       <>
         <SnackbarAlert
           open={open}
@@ -154,7 +156,7 @@ const ExpensePage = () => {
           <div className="flex flex-wrap mt-4">
             <div className="w-full mb-12 px-4">
               <CardTableCustom
-                name={"Expense"}
+                name={translate("expense")}
                 loadingTable={loadingData}
                 createPageUrl={"/expense/create"}
                 updatePageUrl={"/expense/update"}

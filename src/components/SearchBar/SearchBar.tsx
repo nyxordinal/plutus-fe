@@ -1,4 +1,5 @@
 import { formatDateSimple } from "@util";
+import { useTranslation } from "locale/translator";
 
 type PropType = {
   name: string;
@@ -23,6 +24,7 @@ const SearchBar = ({
   onApplyFilter,
   onClearFilter,
 }: PropType) => {
+  const { translate } = useTranslation()
   return (
     <>
       <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">
@@ -32,11 +34,11 @@ const SearchBar = ({
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <div className="mb-3 pt-0">
                   <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                    Name
+                    {translate("name")}
                   </h6>
                   <input
                     type="text"
-                    placeholder="Name"
+                    placeholder={translate("name")}
                     className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
                     value={name}
                     onChange={onNameChange}
@@ -45,7 +47,7 @@ const SearchBar = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4 mb-3">
                 <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                  Start Date
+                  {translate("startDate")}
                 </h6>
                 <input
                   type="date"
@@ -56,7 +58,7 @@ const SearchBar = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4 mb-3">
                 <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                  End Date
+                  {translate("endDate")}
                 </h6>
                 <input
                   type="date"
@@ -67,14 +69,14 @@ const SearchBar = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                  {isFilterChanged ? "Apply Filter" : "Clear Filter"}
+                  {isFilterChanged ? translate("applyFilter") : translate("clearFilter")}
                 </h6>
                 <button
                   className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
                   onClick={isFilterChanged ? onApplyFilter : onClearFilter}
                 >
-                  {isFilterChanged ? "Submit" : "Clear"}
+                  {isFilterChanged ? translate("submit") : translate("clear")}
                 </button>
               </div>
             </div>

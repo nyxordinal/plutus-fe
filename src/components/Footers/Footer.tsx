@@ -1,4 +1,7 @@
+import { useTranslation } from "locale/translator";
+
 const Footer = () => {
+  const { translate } = useTranslation();
   return (
     <>
       <footer className="relative bg-blueGray-200 pt-8 pb-6">
@@ -25,10 +28,10 @@ const Footer = () => {
           <div className="flex flex-wrap text-center lg:text-left">
             <div className="w-full lg:w-6/12 px-4">
               <h4 className="text-3xl font-semibold">
-                Let&apos;s keep in touch!
+                {translate("footerTitle")}
               </h4>
               <h5 className="text-lg mt-0 mb-2 text-blueGray-600">
-                Find us on any of these platforms.
+                {translate("footerSubtitle")}
               </h5>
               <div className="mt-6 lg:mb-0 mb-6">
                 <a
@@ -61,7 +64,7 @@ const Footer = () => {
               <div className="flex flex-wrap items-top mb-6">
                 <div className="w-full lg:w-4/12 px-4 ml-auto">
                   <span className="block uppercase text-blueGray-500 text-sm font-semibold mb-2">
-                    Useful Links
+                    {translate("usefulLinks")}
                   </span>
                   <ul className="list-unstyled">
                     <li>
@@ -69,7 +72,7 @@ const Footer = () => {
                         className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm"
                         href="https://nyxordinal.tech"
                       >
-                        About Us
+                        {translate("aboutUs")}
                       </a>
                     </li>
                     <li>

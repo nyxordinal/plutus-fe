@@ -3,11 +3,13 @@ import Loader from "@component/Loader/Loader";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import Auth from "@layout/Auth";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { useTranslation } from "locale/translator";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 
 const Login = () => {
   const { isAuthenticated, login } = useAuth();
+  const { translate } = useTranslation();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loadingLogin, setLoadingLogin] = useState<boolean>(false);
@@ -86,13 +88,13 @@ const Login = () => {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="input-password"
                       >
-                        Password
+                        {translate("password")}
                       </label>
                       <input
                         id="input-password"
                         type="password"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Password"
+                        placeholder={translate("password")}
                         value={password}
                         onChange={handleChangePassword()}
                       />
@@ -104,7 +106,9 @@ const Login = () => {
                         type="button"
                         onClick={handleSubmit}
                       >
-                        {loadingLogin ? "Loading..." : "Sign In"}
+                        {loadingLogin
+                          ? "Loading..."
+                          : translate("signInBtnText")}
                       </button>
                     </div>
                   </form>
@@ -114,14 +118,14 @@ const Login = () => {
                 <div className="w-1/2">
                   <Link href={"/password/forgot"}>
                     <a href="#pablo" className="text-blueGray-200">
-                      <small>Forgot password?</small>
+                      <small>{translate("forgotPassword")}</small>
                     </a>
                   </Link>
                 </div>
                 <div className="w-1/2 text-right">
                   <Link href="/register">
                     <a href="#pablo" className="text-blueGray-200">
-                      <small>Create new account</small>
+                      <small>{translate("createNewAccount")}</small>
                     </a>
                   </Link>
                 </div>

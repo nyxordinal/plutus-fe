@@ -5,6 +5,7 @@ import Loader from "@component/Loader/Loader";
 import AdminDashboard from "@layout/AdminDashboard";
 import { getExpenseSummary } from "@service/expense.service";
 import { getIncomeSummary } from "@service/income.service";
+import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { getExpenseSummaryState, setExpenseSummary } from "redux/expense";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
@@ -13,6 +14,7 @@ import { getIncomeSummaryState, setIncomeSummary } from "redux/income";
 const Dashboard = () => {
   const { isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
+  const { translate } = useTranslation()
   const expenseSummary = useAppSelector(getExpenseSummaryState).map((o) => ({
     ...o,
   }));
@@ -57,14 +59,14 @@ const Dashboard = () => {
             <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
               <CardLineChartSummary
                 id={"expense-chart"}
-                title="Expense"
+                title={translate("expense")}
                 data={expenseSummary}
               />
             </div>
             <div className="w-full xl:w-6/12 px-4">
               <CardLineChartSummary
                 id={"income-chart"}
-                title="Income"
+                title={translate("income")}
                 data={incomeSummary}
               />
             </div>
@@ -73,14 +75,14 @@ const Dashboard = () => {
         <div className="flex flex-wrap mt-4">
           <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
             <CardPageSummary
-              title="Expense Summary"
+              title={translate("expenseSummary")}
               seeAllUrl="/expense"
               data={expenseSummary}
             />
           </div>
           <div className="w-full xl:w-6/12 px-4">
             <CardPageSummary
-              title="Income Summary"
+              title={translate("incomeSummary")}
               seeAllUrl="/income"
               data={incomeSummary}
             />

@@ -1,8 +1,10 @@
 import Footer from "@component/Footers/Footer";
 import IndexNavbar from "@component/Navbars/IndexNavbar";
+import { useTranslation } from "locale/translator";
 import Link from "next/link";
 
 const Index = () => {
+  const { translate } = useTranslation()
   return (
     <>
       <IndexNavbar />
@@ -11,18 +13,15 @@ const Index = () => {
           <div className="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
             <div className="pt-32 sm:pt-0">
               <h2 className="font-semibold text-4xl text-blueGray-600">
-                Plutus - Your free online companion for easy daily expense
-                management
+                Plutus - {translate("mainTitle")}
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                Plutus is Free and Open Source. Streamline your daily expenses
-                with Plutus, empowering you to take control of your financial
-                journey.
+                {translate("mainSubtitle")}
               </p>
               <div className="mt-12">
                 <Link href="/register">
                   <a className="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-400 active:bg-blueGray-500 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150">
-                    Get started
+                    {translate("getStarted")}
                   </a>
                 </Link>
                 <a
@@ -86,11 +85,10 @@ const Index = () => {
                     ></polygon>
                   </svg>
                   <h4 className="text-xl font-bold text-white">
-                    Elevate your daily expense management experience
+                    {translate("subtitle1")}
                   </h4>
                   <p className="text-md font-light mt-2 text-white">
-                    Say goodbye to tedious notebooks and embrace a neat,
-                    hassle-free approach to managing your finances.
+                    {translate("subtitle2")}
                   </p>
                 </blockquote>
               </div>
@@ -105,10 +103,10 @@ const Index = () => {
                         <i className="fas fa-chart-line"></i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
-                        Expense Summary
+                        {translate("feature1Title")}
                       </h6>
                       <p className="mb-4 text-blueGray-500">
-                        Show your expense summary per month and year.
+                        {translate("feature1Subtitle")}
                       </p>
                     </div>
                   </div>
@@ -117,9 +115,11 @@ const Index = () => {
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-money-bill"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Expense</h6>
+                      <h6 className="text-xl mb-1 font-semibold">
+                        {translate("feature2Title")}
+                      </h6>
                       <p className="mb-4 text-blueGray-500">
-                        Record and search your expenses with ease.
+                        {translate("feature2Subtitle")}
                       </p>
                     </div>
                   </div>
@@ -131,10 +131,10 @@ const Index = () => {
                         <i className="fas fa-chart-line"></i>
                       </div>
                       <h6 className="text-xl mb-1 font-semibold">
-                        Income Summary
+                        {translate("feature3Title")}
                       </h6>
                       <p className="mb-4 text-blueGray-500">
-                        Show your income summary per month and year.
+                        {translate("feature3Subtitle")}
                       </p>
                     </div>
                   </div>
@@ -143,9 +143,11 @@ const Index = () => {
                       <div className="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white">
                         <i className="fas fa-wallet"></i>
                       </div>
-                      <h6 className="text-xl mb-1 font-semibold">Income</h6>
+                      <h6 className="text-xl mb-1 font-semibold">
+                        {translate("feature4Title")}
+                      </h6>
                       <p className="mb-4 text-blueGray-500">
-                        Record and search your incomes with ease.
+                        {translate("feature4Subtitle")}
                       </p>
                     </div>
                   </div>
@@ -167,7 +169,7 @@ const Index = () => {
                 Open Source
               </h3>
               <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-400">
-                Since{" "}
+                {translate("since")}{" "}
                 <a
                   href="https://github.com/nyxordinal/plutus-fe"
                   className="text-blueGray-300"
@@ -176,12 +178,10 @@ const Index = () => {
                 >
                   Plutus
                 </a>{" "}
-                is an open source project we wanted to continue this movement
-                too. You can clone and use this project to your liking!
+                {translate("footerDesc")}
               </p>
               <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-blueGray-400">
-                Get it free on Github and please help us spread the news with a
-                Star!
+                {translate("footerDesc2")}
               </p>
               <a
                 href="https://github.com/nyxordinal/plutus-fe"

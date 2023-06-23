@@ -8,6 +8,7 @@ import { TableItem } from "@interface/entity.interface";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { updateIncome } from "@service/income.service";
 import { formatDateSimple, useLocalStorage } from "@util";
+import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setIncomeMessage } from "redux/general";
@@ -17,6 +18,8 @@ const Update = () => {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { translate } = useTranslation()
+
 
   const [updateData, setUpdateData] = useLocalStorage<TableItem>(
     "updateDataIncome",
@@ -103,12 +106,12 @@ const Update = () => {
       />
       <Sidebar />
       <div className="relative md:ml-64 bg-blueGray-100">
-        <AdminNavbar name={"update income"} customUrl={"/income/update"} />
+        <AdminNavbar name={translate("updateIncome")} customUrl={"/income/update"} />
         <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">
           <div className="px-4 md:px-10 mx-auto w-full">
             <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">
               <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                Source
+                {translate("source")}
               </h6>
               <input
                 className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
@@ -119,7 +122,7 @@ const Update = () => {
             </div>
             <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">
               <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                Income Type
+                {translate("incomeType")}
               </h6>
               <select
                 className="px-3 py-3 text-blueGray-600 relative bg-white bg-white rounded text-sm w-full"
@@ -129,7 +132,7 @@ const Update = () => {
             </div>
             <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">
               <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                Amount
+                {translate("amount")}
               </h6>
               <input
                 className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
@@ -140,7 +143,7 @@ const Update = () => {
             </div>
             <div className="lg:w-6/12 xl:w-3/12 px-4 mb-8">
               <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                Income Date
+                {translate("incomeDate")}
               </h6>
               <input
                 className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
@@ -158,7 +161,7 @@ const Update = () => {
                   handleSubmit();
                 }}
               >
-                Update Income
+                {translate("updateIncome")}
               </button>
             </div>
           </div>

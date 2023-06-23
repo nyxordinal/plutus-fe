@@ -7,6 +7,7 @@ import { TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
 import Admin from "@layout/Admin";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { deleteBulkIncome, getAllIncomes } from "@service/income.service";
+import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { getIncomeState, setIncome } from "redux/income";
@@ -15,6 +16,7 @@ const IncomePage = () => {
   const { isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
   const incomes = useAppSelector(getIncomeState);
+  const { translate } = useTranslation()
 
   const [totalData, setTotalData] = useState<number>(0);
   const [loadingData, setLoadingData] = useState<boolean>(true);
@@ -79,7 +81,7 @@ const IncomePage = () => {
   return !isAuthenticated ? (
     <Loader />
   ) : (
-    <Admin name="Income" customUrl="/income">
+    <Admin name={translate("income")} customUrl="/income">
       <>
         <SnackbarAlert
           open={open}
@@ -93,7 +95,7 @@ const IncomePage = () => {
           <div className="flex flex-wrap mt-4">
             <div className="w-full mb-12 px-4">
               <CardTableCustom
-                name={"Income"}
+                name={translate("income")}
                 loadingTable={loadingData}
                 createPageUrl={"/income/create"}
                 updatePageUrl={"/income/update"}

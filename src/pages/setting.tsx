@@ -7,10 +7,12 @@ import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import Admin from "@layout/Admin";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { getAllSettings, updateSettings } from "@service/setting.service";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const Setting = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const router = useRouter();
 
   const [loadingPage, setLoadingPage] = useState<boolean>(true);
   const [expenseLimit, setExpenseLimit] = useState<string>("0");
@@ -59,6 +61,12 @@ const Setting = () => {
     };
     resetNotif();
   };
+  const handleEnglishLocale = () => {
+    router.push("/setting", "/setting", { locale: "en" });
+  };
+  const handleBahasaLocale = () => {
+    router.push("/setting", "/setting", { locale: "id" });
+  };
 
   const handleClose = (
     event: React.SyntheticEvent<any> | Event,
@@ -97,6 +105,8 @@ const Setting = () => {
                 onChangeExpenseLimit={handleExpenseLimitChange}
                 saveExpenseLimit={handleSaveExpenseLimit}
                 resetNotification={handleResetNotification}
+                onEnglishLocaleClick={handleEnglishLocale}
+                onBahasaLocaleClick={handleBahasaLocale}
               />
             </div>
             <div className="w-full lg:w-4/12 px-4">

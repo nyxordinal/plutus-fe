@@ -5,11 +5,13 @@ import Auth from "@layout/Auth";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { sendForgotPasswordEmail } from "@service/password.service";
 import { ValidateEmail } from "@util";
+import { useTranslation } from "locale/translator";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated } = useAuth();
+  const { translate } = useTranslation();
   const [email, setEmail] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
@@ -89,7 +91,7 @@ const ForgotPasswordPage = () => {
                           type="button"
                           onClick={handleSubmit}
                         >
-                          Send Reset Password Email
+                          {translate("sendResetPasswordEmailButton")}
                         </button>
                       )}
                     </div>
@@ -100,7 +102,7 @@ const ForgotPasswordPage = () => {
                 <div className="w-1/2">
                   <Link href="/login">
                     <a href="#pablo" className="text-blueGray-200">
-                      <small>Back to Login Page</small>
+                      <small>{translate("backToLoginPageBtn")}</small>
                     </a>
                   </Link>
                 </div>

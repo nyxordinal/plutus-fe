@@ -5,6 +5,7 @@ import { Expense, Income, TableItem } from "@interface/entity.interface";
 import { EXPENSE_TYPE } from "@interface/enum";
 import { TablePagination } from "@mui/material";
 import { currencyFormatter, formatDateSimple } from "@util";
+import { useTranslation } from "locale/translator";
 import Link from "next/link";
 import PropTypes from "prop-types";
 
@@ -43,6 +44,7 @@ const CardTableCustom = ({
   handleDeleteClick,
   items,
 }: PropType) => {
+  const { translate } = useTranslation()
   return (
     <>
       <div
@@ -60,7 +62,7 @@ const CardTableCustom = ({
                   (color === "light" ? "text-blueGray-700" : "text-white")
                 }
               >
-                {name ? `${name} Table` : "Table"}
+                {name ? `${name} ${translate("table")}` : translate("table")}
               </h3>
             </div>
             <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
@@ -70,7 +72,7 @@ const CardTableCustom = ({
               >
                 <Link
                   href={createPageUrl ? createPageUrl : "/create"}
-                >{`Create ${name}`}</Link>
+                >{`${translate("create")} ${name}`}</Link>
               </button>
             </div>
           </div>
@@ -87,7 +89,7 @@ const CardTableCustom = ({
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  Name
+                  {translate("name")}
                 </th>
                 <th
                   className={
@@ -97,7 +99,7 @@ const CardTableCustom = ({
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  Amount
+                  {translate("amount")}
                 </th>
                 <th
                   className={
@@ -107,7 +109,7 @@ const CardTableCustom = ({
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  Date
+                  {translate("date")}
                 </th>
                 <th
                   className={
@@ -117,7 +119,7 @@ const CardTableCustom = ({
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  Type
+                  {translate("type")}
                 </th>
                 <th
                   className={
@@ -127,7 +129,7 @@ const CardTableCustom = ({
                       : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
                   }
                 >
-                  Action
+                  {translate("action")}
                 </th>
               </tr>
             </thead>

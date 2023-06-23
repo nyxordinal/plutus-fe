@@ -4,12 +4,14 @@ import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import Auth from "@layout/Auth";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { resetPassword } from "@service/password.service";
+import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 
 const ResetPasswordPage = () => {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const { translate } = useTranslation();
   const query = router.query;
   const [password, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
@@ -100,13 +102,13 @@ const ResetPasswordPage = () => {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="input-password"
                       >
-                        Password
+                        {translate("password")}
                       </label>
                       <input
                         id="input-password"
                         type="password"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Password"
+                        placeholder={translate("password")}
                         value={password}
                         onChange={handleChangePassword()}
                       />
@@ -117,13 +119,13 @@ const ResetPasswordPage = () => {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="input-password-confirm"
                       >
-                        Password Confirmation
+                        {translate("passwordConfirm")}
                       </label>
                       <input
                         id="input-password-confirm"
                         type="password"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Password Confirmation"
+                        placeholder={translate("passwordConfirm")}
                         value={passwordConfirm}
                         onChange={handleChangePasswordConfirm()}
                       />
@@ -138,7 +140,7 @@ const ResetPasswordPage = () => {
                           type="button"
                           onClick={handleSubmit}
                         >
-                          Reset Password
+                          {translate("resetPasswordBtn")}
                         </button>
                       )}
                     </div>

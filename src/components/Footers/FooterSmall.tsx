@@ -1,8 +1,11 @@
+import { useTranslation } from "locale/translator";
+
 type PropType = {
   absolute: boolean;
 };
 
 const FooterSmall = (props: PropType) => {
+  const { translate } = useTranslation();
   return (
     <>
       <footer
@@ -43,7 +46,7 @@ const FooterSmall = (props: PropType) => {
                     href="https://nyxordinal.tech"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
                   >
-                    About Us
+                    {translate("aboutUs")}
                   </a>
                 </li>
               </ul>

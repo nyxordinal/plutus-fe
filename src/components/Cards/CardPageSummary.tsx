@@ -1,5 +1,6 @@
 import { Summary } from "@interface/entity.interface";
 import { currencyFormatter, formatDateShort } from "@util";
+import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
@@ -11,7 +12,7 @@ type PropType = {
 
 const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
   const router = useRouter();
-
+  const { translate } = useTranslation()
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -31,7 +32,7 @@ const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
                   router.push(seeAllUrl);
                 }}
               >
-                See all
+                {translate("seeAll")}
               </button>
             </div>
           </div>
@@ -41,10 +42,10 @@ const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
             <thead>
               <tr>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  Year Month
+                  {translate("yearMonth")}
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  Amount
+                  {translate("amount")}
                 </th>
               </tr>
             </thead>

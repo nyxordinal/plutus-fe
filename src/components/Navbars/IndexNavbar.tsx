@@ -1,7 +1,9 @@
+import { useTranslation } from "locale/translator";
 import Link from "next/link";
 import { useState } from "react";
 
 const Navbar = () => {
+  const { translate } = useTranslation();
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
     <>
@@ -74,7 +76,7 @@ const Navbar = () => {
                     className="bg-blueGray-700 text-white active:bg-blueGray-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
                     type="button"
                   >
-                    Login to Your Account
+                    {translate("loginButtonText")}
                   </button>
                 </Link>
               </li>

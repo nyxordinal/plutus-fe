@@ -1,4 +1,7 @@
+import { useTranslation } from "locale/translator";
+
 const FooterAdmin = () => {
+  const { translate } = useTranslation()
   return (
     <>
       <footer className="block py-4">
@@ -35,7 +38,7 @@ const FooterAdmin = () => {
                     target={"_blank"}
                     rel={"noreferrer"}
                   >
-                    About Us
+                    {translate("aboutUs")}
                   </a>
                 </li>
               </ul>

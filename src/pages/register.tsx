@@ -4,12 +4,14 @@ import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import Auth from "@layout/Auth";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { ValidateEmail } from "@util";
+import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 
 const Register = () => {
   const { isAuthenticated, register } = useAuth();
   const router = useRouter();
+  const { translate } = useTranslation();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -100,12 +102,12 @@ const Register = () => {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="input-name"
                       >
-                        Name
+                        {translate("name")}
                       </label>
                       <input
                         id="input-name"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Name"
+                        placeholder={translate("name")}
                         value={name}
                         onChange={handleChangeName()}
                       />
@@ -133,13 +135,13 @@ const Register = () => {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="input-password"
                       >
-                        Password
+                        {translate("password")}
                       </label>
                       <input
                         id="input-password"
                         type="password"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Password"
+                        placeholder={translate("password")}
                         value={password}
                         onChange={handleChangePassword()}
                       />
@@ -150,13 +152,13 @@ const Register = () => {
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="input-password-confirm"
                       >
-                        Password Confirmation
+                        {translate("passwordConfirm")}
                       </label>
                       <input
                         id="input-password-confirm"
                         type="password"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        placeholder="Password Confirmation"
+                        placeholder={translate("passwordConfirm")}
                         value={passwordConfirm}
                         onChange={handleChangePasswordConfirm()}
                       />
@@ -188,7 +190,9 @@ const Register = () => {
                         type="button"
                         onClick={handleSubmit}
                       >
-                        {loadingLogin ? "Loading..." : "Create Account"}
+                        {loadingLogin
+                          ? "Loading..."
+                          : translate("registerButtonText")}
                       </button>
                     </div>
                   </form>

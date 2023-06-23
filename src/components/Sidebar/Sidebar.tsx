@@ -1,4 +1,5 @@
 import UserDropdown from "@component/Dropdowns/UserDropdown";
+import { useTranslation } from "locale/translator";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -6,6 +7,7 @@ import { useState } from "react";
 const Sidebar = () => {
   const [collapseShow, setCollapseShow] = useState("hidden");
   const router = useRouter();
+  const { translate } = useTranslation()
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -96,7 +98,7 @@ const Sidebar = () => {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Money Management
+              {translate("moneyManagement")}
             </h6>
             {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
@@ -119,7 +121,7 @@ const Sidebar = () => {
                           : "text-blueGray-300")
                       }
                     ></i>{" "}
-                    Expense
+                    {translate("expense")}
                   </a>
                 </Link>
               </li>
@@ -142,7 +144,7 @@ const Sidebar = () => {
                           : "text-blueGray-300")
                       }
                     ></i>{" "}
-                    Income
+                    {translate("income")}
                   </a>
                 </Link>
               </li>
@@ -152,7 +154,7 @@ const Sidebar = () => {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Setting
+              {translate("setting")}
             </h6>
             {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
@@ -175,7 +177,7 @@ const Sidebar = () => {
                           : "text-blueGray-300")
                       }
                     ></i>{" "}
-                    Account
+                    {translate("account")}
                   </a>
                 </Link>
               </li>
