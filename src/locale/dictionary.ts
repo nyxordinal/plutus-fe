@@ -91,7 +91,8 @@ export const DICTIONARY: Dictionary = {
     updateIncome: "Update Income",
     moneyManagement: "Money Management",
     setting: "Setting",
-    account: "Account"
+    account: "Account",
+    loginToYourAccount: "Login to your account"
   },
   id: {
     mainTitle:
@@ -177,6 +178,7 @@ export const DICTIONARY: Dictionary = {
     updateIncome: "Ubah Pemasukan",
     moneyManagement: "Managemen Uang",
     setting: "Pengaturan",
-    account: "Akun"
+    account: "Akun",
+    loginToYourAccount: "Masuk ke akun anda"
   },
 };
