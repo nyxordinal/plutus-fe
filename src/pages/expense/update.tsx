@@ -66,9 +66,7 @@ const Update = () => {
           date: new Date(),
         });
         dispatch(setExpenseMessage(result.message));
-        setTimeout(() => {
-          router.push("/expense");
-        }, 3000);
+        router.push("/expense");
       } else openSnackbar("error", result.message);
     };
     update();

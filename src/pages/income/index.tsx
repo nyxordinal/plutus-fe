@@ -9,6 +9,7 @@ import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { deleteBulkIncome, getAllIncomes } from "@service/income.service";
 import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
+import { getIncomeMsgState } from "redux/general";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { getIncomeState, setIncome } from "redux/income";
 
@@ -16,6 +17,7 @@ const IncomePage = () => {
   const { isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
   const incomes = useAppSelector(getIncomeState);
+  const createUpdateMsg = useAppSelector(getIncomeMsgState);
   const { translate } = useTranslation()
 
   const [totalData, setTotalData] = useState<number>(0);
@@ -44,6 +46,11 @@ const IncomePage = () => {
       fetchData(page + 1);
     }
   }, [isAuthenticated, rowsPerPage]);
+  useEffect(() => {
+    if (createUpdateMsg != undefined && createUpdateMsg.length != 0)
+      openSnackbar('success', createUpdateMsg)
+  }, [createUpdateMsg]);
+
 
   const handleChangePage = (event: unknown, newPage: number) => {
     fetchData(newPage + 1);

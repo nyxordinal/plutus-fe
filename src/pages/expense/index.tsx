@@ -15,12 +15,14 @@ import { deleteBulkExpense, getAllExpenses } from "@service/expense.service";
 import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { getExpenseState, setExpense } from "redux/expense";
+import { getExpenseMsgState } from "redux/general";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 const ExpensePage = () => {
   const { isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
   const expenses = useAppSelector(getExpenseState);
+  const createUpdateMsg = useAppSelector(getExpenseMsgState);
   const { translate } = useTranslation()
 
   const [totalData, setTotalData] = useState<number>(0);
@@ -69,6 +71,10 @@ const ExpensePage = () => {
       fetchData(page + 1, name, startDate, endDate);
     }
   }, [isAuthenticated, rowsPerPage]);
+  useEffect(() => {
+    if (createUpdateMsg != undefined && createUpdateMsg.length != 0)
+      openSnackbar('success', createUpdateMsg)
+  }, [createUpdateMsg]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterChanged(true);

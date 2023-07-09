@@ -62,9 +62,7 @@ const Update = () => {
           date: new Date(),
         });
         dispatch(setIncomeMessage(result.message));
-        setTimeout(() => {
-          router.push("/income");
-        }, 3000);
+        router.push("/income");
       } else openSnackbar("error", result.message);
     };
     update();
