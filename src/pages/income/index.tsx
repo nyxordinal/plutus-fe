@@ -9,7 +9,7 @@ import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { deleteBulkIncome, getAllIncomes } from "@service/income.service";
 import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
-import { getIncomeMsgState } from "redux/general";
+import { getIncomeMsgState, setIncomeMessage } from "redux/general";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { getIncomeState, setIncome } from "redux/income";
 
@@ -83,6 +83,7 @@ const IncomePage = () => {
       return;
     }
     setOpen(false);
+    dispatch(setIncomeMessage(''))
   };
 
   return !isAuthenticated ? (

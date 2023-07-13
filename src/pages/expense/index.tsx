@@ -15,7 +15,7 @@ import { deleteBulkExpense, getAllExpenses } from "@service/expense.service";
 import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { getExpenseState, setExpense } from "redux/expense";
-import { getExpenseMsgState } from "redux/general";
+import { getExpenseMsgState, setExpenseMessage } from "redux/general";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 const ExpensePage = () => {
@@ -129,6 +129,7 @@ const ExpensePage = () => {
       return;
     }
     setOpen(false);
+    dispatch(setExpenseMessage(''))
   };
   const openSnackbar = (type: AlertColor, message: string) => {
     setMessage(message);
