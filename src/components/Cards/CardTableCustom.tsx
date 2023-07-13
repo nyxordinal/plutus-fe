@@ -44,7 +44,7 @@ const CardTableCustom = ({
   handleDeleteClick,
   items,
 }: PropType) => {
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       <div

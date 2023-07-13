@@ -1,7 +1,7 @@
 import { useTranslation } from "locale/translator";
 
 const FooterAdmin = () => {
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       <footer className="block py-4">

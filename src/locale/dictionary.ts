@@ -63,9 +63,11 @@ export const DICTIONARY: Dictionary = {
     expenseLimit: "Expense Limit",
     lastNotifDate: "Last Notification Date",
     saveExpenseLimitBtn: "Save Expense Limit",
-    saveExpenseLimitBtnDesc: "A notification will be sent via email if your expenses exceed the limit",
+    saveExpenseLimitBtnDesc:
+      "A notification will be sent via email if your expenses exceed the limit",
     resetNotifBtn: "Reset Notification",
-    resetNotifBtnDesc: "Resetting the notification will enable it to be sent again via email whenever you exceed your expense limit",
+    resetNotifBtnDesc:
+      "Resetting the notification will enable it to be sent again via email whenever you exceed your expense limit",
     language: "Language",
     logoutBtn: "Logout",
     date: "Date",
@@ -92,7 +94,7 @@ export const DICTIONARY: Dictionary = {
     moneyManagement: "Money Management",
     setting: "Setting",
     account: "Account",
-    loginToYourAccount: "Login to your account"
+    loginToYourAccount: "Login to your account",
   },
   id: {
     mainTitle:
@@ -150,9 +152,11 @@ export const DICTIONARY: Dictionary = {
     expenseLimit: "Batas Pengeluaran",
     lastNotifDate: "Tanggal Notifikasi Terakhir",
     saveExpenseLimitBtn: "Simpan Batas Pengeluaran",
-    saveExpenseLimitBtnDesc: "Notifikasi akan dikirimkan melalui email jika pengeluaran Anda melebihi batas",
+    saveExpenseLimitBtnDesc:
+      "Notifikasi akan dikirimkan melalui email jika pengeluaran Anda melebihi batas",
     resetNotifBtn: "Atur Ulang Notifikasi",
-    resetNotifBtnDesc: "Menyetel ulang pemberitahuan akan memungkinkannya dikirim lagi melalui email setiap kali Anda melebihi batas pengeluaran Anda",
+    resetNotifBtnDesc:
+      "Menyetel ulang pemberitahuan akan memungkinkannya dikirim lagi melalui email setiap kali Anda melebihi batas pengeluaran Anda",
     language: "Bahasa",
     logoutBtn: "Keluar",
     date: "Tanggal",
@@ -179,6 +183,6 @@ export const DICTIONARY: Dictionary = {
     moneyManagement: "Managemen Uang",
     setting: "Pengaturan",
     account: "Akun",
-    loginToYourAccount: "Masuk ke akun anda"
+    loginToYourAccount: "Masuk ke akun anda",
   },
 };

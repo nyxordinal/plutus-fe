@@ -24,7 +24,7 @@ const SearchBar = ({
   onApplyFilter,
   onClearFilter,
 }: PropType) => {
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">
@@ -69,7 +69,9 @@ const SearchBar = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                  {isFilterChanged ? translate("applyFilter") : translate("clearFilter")}
+                  {isFilterChanged
+                    ? translate("applyFilter")
+                    : translate("clearFilter")}
                 </h6>
                 <button
                   className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"

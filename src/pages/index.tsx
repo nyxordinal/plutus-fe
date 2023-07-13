@@ -4,7 +4,7 @@ import { useTranslation } from "locale/translator";
 import Link from "next/link";
 
 const Index = () => {
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       <IndexNavbar />

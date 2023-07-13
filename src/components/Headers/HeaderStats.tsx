@@ -16,7 +16,7 @@ const HeaderStats = ({
   incomeTotal,
   incomeAverage,
 }: PropType) => {
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       {/* Header */}

@@ -12,7 +12,7 @@ type PropType = {
 
 const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
   const router = useRouter();
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">

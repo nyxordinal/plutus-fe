@@ -18,8 +18,7 @@ const Update = () => {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { translate } = useTranslation()
-
+  const { translate } = useTranslation();
 
   const [updateData, setUpdateData] = useLocalStorage<TableItem>(
     "updateDataIncome",
@@ -104,7 +103,10 @@ const Update = () => {
       />
       <Sidebar />
       <div className="relative md:ml-64 bg-blueGray-100">
-        <AdminNavbar name={translate("updateIncome")} customUrl={"/income/update"} />
+        <AdminNavbar
+          name={translate("updateIncome")}
+          customUrl={"/income/update"}
+        />
         <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">
           <div className="px-4 md:px-10 mx-auto w-full">
             <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">

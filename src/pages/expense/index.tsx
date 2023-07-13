@@ -23,7 +23,7 @@ const ExpensePage = () => {
   const dispatch = useAppDispatch();
   const expenses = useAppSelector(getExpenseState);
   const createUpdateMsg = useAppSelector(getExpenseMsgState);
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
 
   const [totalData, setTotalData] = useState<number>(0);
   const [loadingData, setLoadingData] = useState<boolean>(true);
@@ -73,7 +73,7 @@ const ExpensePage = () => {
   }, [isAuthenticated, rowsPerPage]);
   useEffect(() => {
     if (createUpdateMsg != undefined && createUpdateMsg.length != 0)
-      openSnackbar('success', createUpdateMsg)
+      openSnackbar("success", createUpdateMsg);
   }, [createUpdateMsg]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,7 +129,7 @@ const ExpensePage = () => {
       return;
     }
     setOpen(false);
-    dispatch(setExpenseMessage(''))
+    dispatch(setExpenseMessage(""));
   };
   const openSnackbar = (type: AlertColor, message: string) => {
     setMessage(message);

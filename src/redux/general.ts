@@ -26,7 +26,8 @@ export const generalSlice = createSlice({
 
 export const { setExpenseMessage, setIncomeMessage } = generalSlice.actions;
 
-export const getExpenseMsgState = (state: RootState) => state.general.expenseMsg;
+export const getExpenseMsgState = (state: RootState) =>
+  state.general.expenseMsg;
 export const getIncomeMsgState = (state: RootState) => state.general.incomeMsg;
 
 export default generalSlice.reducer;

@@ -18,7 +18,7 @@ const IncomePage = () => {
   const dispatch = useAppDispatch();
   const incomes = useAppSelector(getIncomeState);
   const createUpdateMsg = useAppSelector(getIncomeMsgState);
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
 
   const [totalData, setTotalData] = useState<number>(0);
   const [loadingData, setLoadingData] = useState<boolean>(true);
@@ -48,9 +48,8 @@ const IncomePage = () => {
   }, [isAuthenticated, rowsPerPage]);
   useEffect(() => {
     if (createUpdateMsg != undefined && createUpdateMsg.length != 0)
-      openSnackbar('success', createUpdateMsg)
+      openSnackbar("success", createUpdateMsg);
   }, [createUpdateMsg]);
-
 
   const handleChangePage = (event: unknown, newPage: number) => {
     fetchData(newPage + 1);
@@ -83,7 +82,7 @@ const IncomePage = () => {
       return;
     }
     setOpen(false);
-    dispatch(setIncomeMessage(''))
+    dispatch(setIncomeMessage(""));
   };
 
   return !isAuthenticated ? (

@@ -14,7 +14,7 @@ import { getIncomeSummaryState, setIncomeSummary } from "redux/income";
 const Dashboard = () => {
   const { isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   const expenseSummary = useAppSelector(getExpenseSummaryState).map((o) => ({
     ...o,
   }));

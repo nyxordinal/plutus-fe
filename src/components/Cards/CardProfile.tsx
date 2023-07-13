@@ -2,11 +2,11 @@ import { useTranslation } from "locale/translator";
 
 type PropType = {
   name: string;
-  logout: () => void
+  logout: () => void;
 };
 
 export default function CardProfile({ name, logout }: PropType) {
-  const { translate } = useTranslation()
+  const { translate } = useTranslation();
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
