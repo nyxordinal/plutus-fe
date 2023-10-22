@@ -6,7 +6,7 @@ import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { resetPassword } from "@service/password.service";
 import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const ResetPasswordPage = () => {
   const { isAuthenticated } = useAuth();
@@ -19,6 +19,14 @@ const ResetPasswordPage = () => {
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
+  useEffect(() => {
+    if (!query["email"] || !query["reset-token"]) {
+      router.push("/password/forgot");
+    }
+  }, [query]);
 
   const handleChangePassword = () => (event: ChangeEvent<HTMLInputElement>) =>
     setPassword(event.target.value);
@@ -80,6 +88,14 @@ const ResetPasswordPage = () => {
     setOpen(false);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const togglePasswordConfirmVisibility = () => {
+    setShowPasswordConfirm(!showPasswordConfirm);
+  };
+
   return isAuthenticated ? (
     <Loader />
   ) : (
@@ -106,12 +122,18 @@ const ResetPasswordPage = () => {
                       </label>
                       <input
                         id="input-password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         placeholder={translate("password")}
                         value={password}
                         onChange={handleChangePassword()}
                       />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? "Hide" : "Show"} Password
+                      </button>
                     </div>
 
                     <div className="relative w-full mb-3">
@@ -123,12 +145,18 @@ const ResetPasswordPage = () => {
                       </label>
                       <input
                         id="input-password-confirm"
-                        type="password"
+                        type={showPasswordConfirm ? "text" : "password"}
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         placeholder={translate("passwordConfirm")}
                         value={passwordConfirm}
                         onChange={handleChangePasswordConfirm()}
                       />
+                      <button
+                        type="button"
+                        onClick={togglePasswordConfirmVisibility}
+                      >
+                        {showPasswordConfirm ? "Hide" : "Show"} Password
+                      </button>
                     </div>
 
                     <div className="text-center mt-6">

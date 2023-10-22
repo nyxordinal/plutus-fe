@@ -16,6 +16,11 @@ const Login = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChangeEmail = () => (event: ChangeEvent<HTMLInputElement>) =>
     setEmail(event.target.value);
@@ -92,12 +97,18 @@ const Login = () => {
                       </label>
                       <input
                         id="input-password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         placeholder={translate("password")}
                         value={password}
                         onChange={handleChangePassword()}
                       />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? "Hide" : "Show"} Password
+                      </button>
                     </div>
 
                     <div className="text-center mt-6">
