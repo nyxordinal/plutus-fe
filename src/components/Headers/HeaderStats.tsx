@@ -1,5 +1,6 @@
 import CardStats from "@component/Cards/CardStats";
-import { currencyFormatter } from "@util";
+import { formatCurrency } from "@util";
+import { useCurrency } from "currency";
 import { useTranslation } from "locale/translator";
 import PropTypes from "prop-types";
 
@@ -17,6 +18,7 @@ const HeaderStats = ({
   incomeAverage,
 }: PropType) => {
   const { translate } = useTranslation();
+  const { currency } = useCurrency();
   return (
     <>
       {/* Header */}
@@ -28,7 +30,7 @@ const HeaderStats = ({
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle={translate("totalExpense")}
-                  statTitle={currencyFormatter.format(expenseTotal)}
+                  statTitle={formatCurrency(currency, expenseTotal)}
                   statIconName="fas fa-dollar-sign"
                   statIconColor="bg-red-500"
                 />
@@ -36,7 +38,7 @@ const HeaderStats = ({
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle={translate("avgExpense")}
-                  statTitle={currencyFormatter.format(expenseAverage)}
+                  statTitle={formatCurrency(currency, expenseAverage)}
                   statIconName="fas fa-chart-pie"
                   statIconColor="bg-pink-500"
                 />
@@ -44,7 +46,7 @@ const HeaderStats = ({
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle={translate("totalIncome")}
-                  statTitle={currencyFormatter.format(incomeTotal)}
+                  statTitle={formatCurrency(currency, incomeTotal)}
                   statIconName="fas fa-wallet"
                   statIconColor="bg-orange-500"
                 />
@@ -52,7 +54,7 @@ const HeaderStats = ({
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
                   statSubtitle={translate("avgIncome")}
-                  statTitle={currencyFormatter.format(incomeAverage)}
+                  statTitle={formatCurrency(currency, incomeAverage)}
                   statIconName="fas fa-chart-pie"
                   statIconColor="bg-lightBlue-500"
                 />

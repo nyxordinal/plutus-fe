@@ -2,6 +2,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
+  currency: string;
 }
 
 export interface Expense {
@@ -35,4 +36,5 @@ export interface Summary {
 export interface Settings {
   expenseLimit: number;
   lastNotifDate: string;
+  currency: string;
 }

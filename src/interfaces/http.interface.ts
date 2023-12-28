@@ -27,6 +27,7 @@ export interface LoginResponse {
   id: number;
   name: string;
   email: string;
+  currency: string;
 }
 
 export interface ExpenseResponseItem {
@@ -75,6 +76,7 @@ export interface IncomeResponse {
 export interface SettingsRequest {
   expenseLimit: number;
   isResetNotif: boolean;
+  currency: string;
 }
 
 export interface SettingsResponse {

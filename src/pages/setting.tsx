@@ -4,28 +4,34 @@ import CardSettings from "@component/Cards/CardSettings";
 import FooterAdmin from "@component/Footers/FooterAdmin";
 import Loader from "@component/Loader/Loader";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
+import { User } from "@interface/entity.interface";
 import Admin from "@layout/Admin";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { getUserCookie, setUserCookie } from "@service/cookie.service";
 import { getAllSettings, updateSettings } from "@service/setting.service";
+import { useCurrency } from "currency";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const Setting = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { updateCurrency: setCurrency } = useCurrency();
   const router = useRouter();
 
   const [loadingPage, setLoadingPage] = useState<boolean>(true);
   const [expenseLimit, setExpenseLimit] = useState<string>("0");
   const [lastNotifDate, setLastNotifDate] = useState<string>("");
+  const [currencyInput, setCurrencyInput] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
 
   const fetchData = async () => {
     setLoadingPage(true);
-    const { expenseLimit, lastNotifDate } = await getAllSettings();
+    const { expenseLimit, lastNotifDate, currency } = await getAllSettings();
     setExpenseLimit(expenseLimit.toString());
     setLastNotifDate(lastNotifDate);
+    setCurrencyInput(currency);
   };
 
   useEffect(() => {
@@ -38,11 +44,41 @@ const Setting = () => {
   const handleExpenseLimitChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => setExpenseLimit(parseFloat(event.target.value).toFixed(2));
+  const handleCurrencyChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setCurrencyInput(event.target.value);
+    const update = async () => {
+      const result = await updateSettings({
+        expenseLimit: parseFloat(expenseLimit),
+        isResetNotif: false,
+        currency: event.target.value,
+      });
+      if (result.success) {
+        openSnackbar(
+          "success",
+          "Currency updated, page will automatically refresh"
+        );
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } else openSnackbar("error", result.message);
+    };
+    update();
+    setCurrency(event.target.value);
+    const userDataString = getUserCookie();
+    if (userDataString) {
+      const user: User = JSON.parse(userDataString);
+      user.currency = event.target.value;
+      setUserCookie(user);
+    }
+  };
   const handleSaveExpenseLimit = () => {
     const update = async () => {
       const result = await updateSettings({
         expenseLimit: parseFloat(expenseLimit),
         isResetNotif: false,
+        currency: currencyInput,
       });
       if (result.success) openSnackbar("success", result.message);
       else openSnackbar("error", result.message);
@@ -54,6 +90,7 @@ const Setting = () => {
       const result = await updateSettings({
         expenseLimit: parseFloat(expenseLimit),
         isResetNotif: true,
+        currency: currencyInput,
       });
       if (result.success)
         openSnackbar("success", "Notification reset successful");
@@ -102,7 +139,9 @@ const Setting = () => {
                 user={user}
                 expenseLimit={expenseLimit}
                 lastNotifDate={lastNotifDate}
+                currency={currencyInput}
                 onChangeExpenseLimit={handleExpenseLimitChange}
+                onChangeCurrency={handleCurrencyChange}
                 saveExpenseLimit={handleSaveExpenseLimit}
                 resetNotification={handleResetNotification}
                 onEnglishLocaleClick={handleEnglishLocale}

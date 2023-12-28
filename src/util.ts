@@ -1,4 +1,4 @@
-import { MAIL_FORMAT } from "@interface/constant";
+import { CURRENCIES, MAIL_FORMAT } from "@interface/constant";
 import { useState } from "react";
 
 /**
@@ -93,14 +93,23 @@ export const enumToArray = (enumme: any): EnumArray[] => {
 };
 
 /**
- * Convert number to IDR currency
+ * Currency formatter
+ * Convert number to currency
  */
-export const currencyFormatter = new Intl.NumberFormat("ID", {
-  style: "currency",
-  currency: "IDR",
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
+const currencyFormatsMap = new Map<string, Intl.NumberFormat>();
+CURRENCIES.forEach((currency) => {
+  const numberFormat = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+  currencyFormatsMap.set(currency, numberFormat);
 });
+export const formatCurrency = (
+  currency: string,
+  value: number | bigint
+): string | undefined => currencyFormatsMap.get(currency)?.format(value);
 
 /**
  * Log message from error response

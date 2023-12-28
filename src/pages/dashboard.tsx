@@ -5,6 +5,7 @@ import Loader from "@component/Loader/Loader";
 import AdminDashboard from "@layout/AdminDashboard";
 import { getExpenseSummary } from "@service/expense.service";
 import { getIncomeSummary } from "@service/income.service";
+import { useCurrency } from "currency";
 import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { getExpenseSummaryState, setExpenseSummary } from "redux/expense";
@@ -12,9 +13,10 @@ import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { getIncomeSummaryState, setIncomeSummary } from "redux/income";
 
 const Dashboard = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const dispatch = useAppDispatch();
   const { translate } = useTranslation();
+  const { updateCurrency } = useCurrency();
   const expenseSummary = useAppSelector(getExpenseSummaryState).map((o) => ({
     ...o,
   }));
@@ -29,6 +31,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      updateCurrency(user.currency);
       const expensesData = await getExpenseSummary();
       const incomesData = await getIncomeSummary();
       dispatch(setExpenseSummary(expensesData.data));

@@ -95,6 +95,7 @@ export const DICTIONARY: Dictionary = {
     setting: "Setting",
     account: "Account",
     loginToYourAccount: "Login to your account",
+    currency: "Currency",
   },
   id: {
     mainTitle:
@@ -184,5 +185,6 @@ export const DICTIONARY: Dictionary = {
     setting: "Pengaturan",
     account: "Akun",
     loginToYourAccount: "Masuk ke akun anda",
+    currency: "Mata Uang",
   },
 };

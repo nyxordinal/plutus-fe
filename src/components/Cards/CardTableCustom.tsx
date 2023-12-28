@@ -4,7 +4,8 @@ import { TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
 import { Expense, Income, TableItem } from "@interface/entity.interface";
 import { EXPENSE_TYPE } from "@interface/enum";
 import { TablePagination } from "@mui/material";
-import { currencyFormatter, formatDateSimple } from "@util";
+import { formatCurrency, formatDateSimple } from "@util";
+import { useCurrency } from "currency";
 import { useTranslation } from "locale/translator";
 import Link from "next/link";
 import PropTypes from "prop-types";
@@ -45,6 +46,7 @@ const CardTableCustom = ({
   items,
 }: PropType) => {
   const { translate } = useTranslation();
+  const { currency } = useCurrency();
   return (
     <>
       <div
@@ -165,7 +167,7 @@ const CardTableCustom = ({
                           {row.name}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4">
-                          {currencyFormatter.format(row.price)}
+                          {formatCurrency(currency, row.price)}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4">
                           {formatDateSimple(row.date)}

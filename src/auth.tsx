@@ -16,6 +16,7 @@ import {
 } from "@service/cookie.service";
 import { getUTCTimestamp, removeLocalStorageItem } from "@util";
 import { AxiosResponse } from "axios";
+import { useCurrency } from "currency";
 import { encryptPayload } from "encryptor";
 import { useRouter } from "next/router";
 import {
@@ -34,6 +35,7 @@ const DefaultUser: User = {
   id: 0,
   name: "",
   email: "",
+  currency: "",
 };
 
 type AuthContextType = {
@@ -84,13 +86,18 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
   const [user, setUser] = useState<User>(DefaultUser);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
+  const { updateCurrency } = useCurrency();
 
   useEffect(() => {
     async function loadUserFromCookies() {
       const token = getTokenCookie();
       if (token) {
-        const user = getUserCookie();
-        if (user) setUser(JSON.parse(user));
+        const userString = getUserCookie();
+        if (userString) {
+          const user: User = JSON.parse(userString);
+          updateCurrency(user.currency);
+          setUser(user);
+        }
       }
       setLoading(false);
     }
@@ -124,12 +131,14 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
         id: loginResponse.id || 0,
         name: loginResponse.name,
         email: loginResponse.email,
+        currency: loginResponse.currency,
       };
       const token: string = headers[AUTH_TOKEN_KEY] || "";
       if (token) {
         setTokenCookie(token);
         setUserCookie(user);
         setUser(user);
+        updateCurrency(user.currency);
         window.location.pathname = "/dashboard";
       }
       return { success: true, message: "Login success" };
@@ -207,7 +216,9 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
 
 export default function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
-
+  if (!context) {
+    throw new Error("useCurrency must be used within a CurrencyProvider");
+  }
   return context;
 }
 

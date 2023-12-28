@@ -1,5 +1,6 @@
 import { Summary } from "@interface/entity.interface";
-import { currencyFormatter, formatDateShort } from "@util";
+import { formatCurrency, formatDateShort } from "@util";
+import { useCurrency } from "currency";
 import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
@@ -13,6 +14,7 @@ type PropType = {
 const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
   const router = useRouter();
   const { translate } = useTranslation();
+  const { currency } = useCurrency();
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -57,7 +59,7 @@ const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
                       {formatDateShort(row.yearmonth)}
                     </th>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {currencyFormatter.format(row.amount)}
+                      {formatCurrency(currency, row.amount)}
                     </td>
                   </tr>
                 );

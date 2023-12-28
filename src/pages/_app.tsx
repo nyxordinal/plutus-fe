@@ -1,5 +1,6 @@
 import { AuthProvider } from "@auth";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { CurrencyProvider } from "currency";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { Fragment } from "react";
@@ -19,9 +20,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
       <Provider store={store}>
         <AuthProvider>
-          {/* <Layout> */}
-          <Component {...pageProps} />
-          {/* </Layout> */}
+          <CurrencyProvider>
+            <Component {...pageProps} />
+          </CurrencyProvider>
         </AuthProvider>
       </Provider>
     </Fragment>
