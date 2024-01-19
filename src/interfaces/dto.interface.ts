@@ -37,4 +37,5 @@ export interface GetExpenseSummaryResult {
   total: number;
   average: number;
   data: Summary[];
+  totalData: number;
 }

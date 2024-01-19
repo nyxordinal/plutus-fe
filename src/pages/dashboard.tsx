@@ -2,6 +2,7 @@ import useAuth, { ProtectRoute } from "@auth";
 import CardLineChartSummary from "@component/Cards/CardLineSummary";
 import CardPageSummary from "@component/Cards/CardPageSummary";
 import Loader from "@component/Loader/Loader";
+import { TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
 import AdminDashboard from "@layout/AdminDashboard";
 import { getExpenseSummary } from "@service/expense.service";
 import { getIncomeSummary } from "@service/income.service";
@@ -28,16 +29,78 @@ const Dashboard = () => {
   const [expenseAvg, setExpenseAvg] = useState(0);
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [incomeAvg, setIncomeAvg] = useState(0);
+  const [totalExpenseSummaryData, setTotalExpenseSummaryData] = useState<number>(0);
+  const [expenseSummaryPage, setExpenseSummaryPage] = useState<number>(0);
+  const [expenseSummaryRowsPerPage, setExpenseSummaryRowsPerPage] = useState<number>(
+    TABLE_ROW_PER_PAGE_OPTION[1]
+  );
+  const [totalIncomeSummaryData, setTotalIncomeSummaryData] = useState<number>(0);
+  const [incomeSummaryPage, setIncomeSummaryPage] = useState<number>(0);
+  const [incomeSummaryRowsPerPage, setIncomeSummaryRowsPerPage] = useState<number>(
+    TABLE_ROW_PER_PAGE_OPTION[1]
+  );
+
+  const fetchExpenseSummary = async (
+    page: number,
+    dataPerPage: number
+  ) => {
+    setLoading(true);
+    const expensesData = await getExpenseSummary(page, dataPerPage);
+    dispatch(setExpenseSummary(expensesData.data));
+    setExpenseTotal(expensesData.total);
+    setExpenseAvg(expensesData.average);
+    setTotalExpenseSummaryData(expensesData.totalData)
+    setLoading(false);
+  };
+  const handleChangeExpenseSummaryPage = (event: unknown, newPage: number) => {
+    fetchExpenseSummary(newPage + 1, expenseSummaryRowsPerPage);
+    setExpenseSummaryPage(newPage);
+  };
+  const handleChangeExpenseSummaryRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newRowsPerPage: number = parseInt(event.target.value, 10)
+    fetchExpenseSummary(1, newRowsPerPage);
+    setExpenseSummaryPage(0);
+    setExpenseSummaryRowsPerPage(newRowsPerPage);
+  };
+
+  const fetchIncomeSummary = async (
+    page: number,
+    dataPerPage: number
+  ) => {
+    setLoading(true);
+    const incomesData = await getIncomeSummary(page, dataPerPage);
+    dispatch(setIncomeSummary(incomesData.data));
+    setIncomeTotal(incomesData.total);
+    setIncomeAvg(incomesData.average);
+    setTotalIncomeSummaryData(incomesData.totalData)
+    setLoading(false);
+  };
+  const handleChangeIncomeSummaryPage = (event: unknown, newPage: number) => {
+    fetchIncomeSummary(newPage + 1, incomeSummaryRowsPerPage);
+    setIncomeSummaryPage(newPage);
+  };
+  const handleChangeIncomeSummaryRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newRowsPerPage: number = parseInt(event.target.value, 10)
+    fetchIncomeSummary(1, newRowsPerPage);
+    setIncomeSummaryPage(0);
+    setIncomeSummaryRowsPerPage(newRowsPerPage);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       updateCurrency(user.currency);
-      const expensesData = await getExpenseSummary();
-      const incomesData = await getIncomeSummary();
+      const expensesData = await getExpenseSummary(expenseSummaryPage, expenseSummaryRowsPerPage);
+      const incomesData = await getIncomeSummary(incomeSummaryPage, incomeSummaryRowsPerPage);
       dispatch(setExpenseSummary(expensesData.data));
       dispatch(setIncomeSummary(incomesData.data));
       setExpenseTotal(expensesData.total);
       setExpenseAvg(expensesData.average);
+      setTotalExpenseSummaryData(expensesData.totalData)
+      setTotalIncomeSummaryData(incomesData.totalData)
       setIncomeTotal(incomesData.total);
       setIncomeAvg(incomesData.average);
       setLoading(false);
@@ -81,6 +144,11 @@ const Dashboard = () => {
               title={translate("expenseSummary")}
               seeAllUrl="/expense"
               data={expenseSummary}
+              totalData={totalExpenseSummaryData}
+              page={expenseSummaryPage}
+              rowsPerPage={expenseSummaryRowsPerPage}
+              handleChangePage={handleChangeExpenseSummaryPage}
+              handleChangeRowsPerPage={handleChangeExpenseSummaryRowsPerPage}
             />
           </div>
           <div className="w-full xl:w-6/12 px-4">
@@ -88,6 +156,11 @@ const Dashboard = () => {
               title={translate("incomeSummary")}
               seeAllUrl="/income"
               data={incomeSummary}
+              totalData={totalIncomeSummaryData}
+              page={incomeSummaryPage}
+              rowsPerPage={incomeSummaryRowsPerPage}
+              handleChangePage={handleChangeIncomeSummaryPage}
+              handleChangeRowsPerPage={handleChangeIncomeSummaryRowsPerPage}
             />
           </div>
         </div>

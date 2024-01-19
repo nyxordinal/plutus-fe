@@ -15,21 +15,23 @@ import {
 import { formatDateSimple, logErrorResponse } from "@util";
 import { API } from "api";
 
-const getAllExpensesQuery = (params: GetAllExpenseServiceInterface): string => {
-  let query = "/expense";
+const getExpenseSummaryUrl = "/expense/summary"
+const getAllExpensesUrl = "/expense"
+
+const getPaginationQuery = (url: string, params: GetAllExpenseServiceInterface): string => {
   params.page === 0
-    ? (query = query.concat("?page=1"))
-    : (query = query.concat("?page=" + params.page.toString()));
+    ? (url = url.concat("?page=1"))
+    : (url = url.concat("?page=" + params.page.toString()));
   params.dataPerPage === 0
-    ? (query = query.concat("&count=5"))
-    : (query = query.concat("&count=" + params.dataPerPage.toString()));
+    ? (url = url.concat("&count=5"))
+    : (url = url.concat("&count=" + params.dataPerPage.toString()));
   if (params.startDate !== undefined)
-    query = query.concat("&start=" + params.startDate.toISOString());
+    url = url.concat("&start=" + params.startDate.toISOString());
   if (params.endDate !== undefined)
-    query = query.concat("&end=" + params.endDate.toISOString());
+    url = url.concat("&end=" + params.endDate.toISOString());
   if (params.name !== undefined && params.name !== "")
-    query = query.concat("&name=" + params.name);
-  return query;
+    url = url.concat("&name=" + params.name);
+  return url;
 };
 
 export const getAllExpenses = async (
@@ -37,7 +39,7 @@ export const getAllExpenses = async (
 ): Promise<GetAllExpenseServiceResult> => {
   try {
     const r: APIResponse<ExpenseResponse> = await API.get(
-      getAllExpensesQuery(params)
+      getPaginationQuery(getAllExpensesUrl, params)
     );
     const { data, total } = r.data as ExpenseResponse;
     const expenseData: Expense[] = data.map((expense) => {
@@ -60,20 +62,22 @@ export const getAllExpenses = async (
   }
 };
 
-export const getExpenseSummary = async (): Promise<GetExpenseSummaryResult> => {
+export const getExpenseSummary = async (page: number, dataPerPage: number): Promise<GetExpenseSummaryResult> => {
   try {
-    const r: APIResponse<SummaryResponse> = await API.get("/expense/summary");
-    const responseData = r.data as SummaryResponse;
-    const data: Summary[] = responseData.data.map((expenseSummary) => {
+    const r: APIResponse<SummaryResponse> = await API.get(
+      getPaginationQuery(getExpenseSummaryUrl, { page, dataPerPage })
+    );
+    const { total, avg, data } = r.data as SummaryResponse;
+    const summaryData: Summary[] = data.data.map((expenseSummary) => {
       return {
         yearmonth: new Date(expenseSummary.yearmonth),
         amount: parseInt(expenseSummary.amount),
       };
     });
-    return { total: responseData.total, average: responseData.avg, data };
+    return { total: total, average: avg, data: summaryData, totalData: data.total };
   } catch (error) {
     logErrorResponse(error);
-    return { total: 0, average: 0, data: [] };
+    return { total: 0, average: 0, data: [], totalData: 0 };
   }
 };
 

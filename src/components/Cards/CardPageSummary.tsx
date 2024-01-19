@@ -1,4 +1,6 @@
+import { TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
 import { Summary } from "@interface/entity.interface";
+import { TablePagination } from "@mui/material";
 import { formatCurrency, formatDateShort } from "@util";
 import { useCurrency } from "currency";
 import { useTranslation } from "locale/translator";
@@ -9,9 +11,23 @@ type PropType = {
   title: string;
   seeAllUrl: string;
   data: Summary[];
+  totalData: number;
+  page: number;
+  rowsPerPage: number;
+  handleChangePage: (event: unknown, newPage: number) => void;
+  handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
+const CardPageSummary = ({
+  title,
+  seeAllUrl,
+  data,
+  totalData,
+  page,
+  rowsPerPage,
+  handleChangePage,
+  handleChangeRowsPerPage
+}: PropType) => {
   const router = useRouter();
   const { translate } = useTranslation();
   const { currency } = useCurrency();
@@ -67,6 +83,15 @@ const CardPageSummary = ({ title, seeAllUrl, data }: PropType) => {
             </tbody>
           </table>
         </div>
+        <TablePagination
+          rowsPerPageOptions={TABLE_ROW_PER_PAGE_OPTION}
+          component="div"
+          count={totalData}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </div>
     </>
   );

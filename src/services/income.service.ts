@@ -14,15 +14,18 @@ import {
 import { formatDateSimple, logErrorResponse } from "@util";
 import { API } from "api";
 
-const getAllIncomesQuery = (page: number, dataPerPage: number): string => {
-  let query = "/income";
+
+const getIncomeSummaryUrl = "/income/summary"
+const getAllIncomesUrl = "/income"
+
+const getPaginationQuery = (url: string, page: number, dataPerPage: number): string => {
   page === 0
-    ? (query = query.concat("?page=1"))
-    : (query = query.concat("?page=" + page.toString()));
+    ? (url = url.concat("?page=1"))
+    : (url = url.concat("?page=" + page.toString()));
   dataPerPage === 0
-    ? (query = query.concat("&count=5"))
-    : (query = query.concat("&count=" + dataPerPage.toString()));
-  return query;
+    ? (url = url.concat("&count=5"))
+    : (url = url.concat("&count=" + dataPerPage.toString()));
+  return url;
 };
 export const getAllIncomes = async (
   page: number,
@@ -30,7 +33,7 @@ export const getAllIncomes = async (
 ): Promise<GetAllIncomeServiceResult> => {
   try {
     const r: APIResponse<IncomeResponse> = await API.get(
-      getAllIncomesQuery(page, dataPerPage)
+      getPaginationQuery(getAllIncomesUrl, page, dataPerPage)
     );
     const { data, total } = r.data as IncomeResponse;
     const incomeData: Income[] = data.map((income) => {
@@ -48,20 +51,22 @@ export const getAllIncomes = async (
   }
 };
 
-export const getIncomeSummary = async (): Promise<GetExpenseSummaryResult> => {
+export const getIncomeSummary = async (page: number, dataPerPage: number): Promise<GetExpenseSummaryResult> => {
   try {
-    const r: APIResponse<SummaryResponse> = await API.get("/income/summary");
-    const responseData = r.data as SummaryResponse;
-    const data: Summary[] = responseData.data.map((expenseSummary) => {
+    const r: APIResponse<SummaryResponse> = await API.get(
+      getPaginationQuery(getIncomeSummaryUrl, page, dataPerPage)
+    );
+    const { total, avg, data } = r.data as SummaryResponse;
+    const summaryData: Summary[] = data.data.map((incomeSummary) => {
       return {
-        yearmonth: new Date(expenseSummary.yearmonth),
-        amount: parseInt(expenseSummary.amount),
+        yearmonth: new Date(incomeSummary.yearmonth),
+        amount: parseInt(incomeSummary.amount),
       };
     });
-    return { total: responseData.total, average: responseData.avg, data };
+    return { total: total, average: avg, data: summaryData, totalData: data.total };
   } catch (error) {
     logErrorResponse(error);
-    return { total: 0, average: 0, data: [] };
+    return { total: 0, average: 0, data: [], totalData: 0 };
   }
 };
 

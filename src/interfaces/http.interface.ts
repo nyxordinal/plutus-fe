@@ -48,10 +48,15 @@ export interface SummaryResponseItem {
   amount: string;
 }
 
+export interface SummaryResponseData {
+  data: SummaryResponseItem[];
+  total: number;
+}
+
 export interface SummaryResponse {
   total: number;
   avg: number;
-  data: SummaryResponseItem[];
+  data: SummaryResponseData;
 }
 
 export interface IncomeResponseItem {
