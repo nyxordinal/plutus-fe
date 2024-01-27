@@ -22,7 +22,7 @@ const FooterSmall = (props: PropType) => {
               <div className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left">
                 Copyright © {new Date().getFullYear()}{" "}
                 <a
-                  href="https://nyxordinal.tech"
+                  href="https://nyxordinal.dev"
                   className="text-white hover:text-blueGray-300 text-sm font-semibold py-1"
                   target={"_blank"}
                   rel={"noreferrer"}
@@ -43,7 +43,7 @@ const FooterSmall = (props: PropType) => {
                 </li>
                 <li>
                   <a
-                    href="https://nyxordinal.tech"
+                    href="https://nyxordinal.dev"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
                   >
                     {translate("aboutUs")}

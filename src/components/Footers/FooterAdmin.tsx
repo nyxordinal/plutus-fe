@@ -12,7 +12,7 @@ const FooterAdmin = () => {
               <div className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left">
                 Copyright © {new Date().getFullYear()}{" "}
                 <a
-                  href="https://nyxordinal.tech"
+                  href="https://nyxordinal.dev"
                   className="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
                 >
                   Nyxordinal
@@ -33,7 +33,7 @@ const FooterAdmin = () => {
                 </li>
                 <li>
                   <a
-                    href="https://nyxordinal.tech"
+                    href="https://nyxordinal.dev"
                     className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
                     target={"_blank"}
                     rel={"noreferrer"}

@@ -70,7 +70,7 @@ const Footer = () => {
                     <li>
                       <a
                         className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm"
-                        href="https://nyxordinal.tech"
+                        href="https://nyxordinal.dev"
                       >
                         {translate("aboutUs")}
                       </a>
@@ -94,7 +94,7 @@ const Footer = () => {
               <div className="text-sm text-blueGray-500 font-semibold py-1">
                 Copyright © {new Date().getFullYear()} Plutus by{" "}
                 <a
-                  href="https://nyxordinal.tech"
+                  href="https://nyxordinal.dev"
                   className="text-blueGray-500 hover:text-blueGray-800"
                 >
                   Nyxordinal

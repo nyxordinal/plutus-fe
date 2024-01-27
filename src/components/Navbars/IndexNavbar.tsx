@@ -37,7 +37,7 @@ const Navbar = () => {
               <li className="flex items-center">
                 <a
                   className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fplutus.nyxordinal.tech"
+                  href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fplutus.nyxordinal.dev"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -49,7 +49,7 @@ const Navbar = () => {
               <li className="flex items-center">
                 <a
                   className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fplutus.nyxordinal.tech&text=Let%27s%20neatly%20record%20and%20manage%20your%20daily%20expenses%20with%20Nyxordinal%20Plutus%21"
+                  href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fplutus.nyxordinal.dev&text=Let%27s%20neatly%20record%20and%20manage%20your%20daily%20expenses%20with%20Nyxordinal%20Plutus%21"
                   target="_blank"
                   rel="noreferrer"
                 >
