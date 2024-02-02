@@ -7,9 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start": "next start",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
     "lint": "next lint",
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider next dev",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && yarn install && npm run build:tailwind && npm run dev",
     "build:tailwind": "tailwind build src/styles/index.css -o src/styles/tailwind.css",
     "format": "prettier --write \"**/*.{js,ts,tsx}\"",
