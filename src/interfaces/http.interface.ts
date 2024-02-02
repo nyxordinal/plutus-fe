@@ -43,20 +43,25 @@ export interface ExpenseResponse {
   total: number;
 }
 
+export interface HomeStatResponse {
+  expense: {
+    total: number;
+    avg: number;
+  },
+  income: {
+    total: number;
+    avg: number;
+  }
+}
+
 export interface SummaryResponseItem {
   yearmonth: string;
   amount: string;
 }
 
-export interface SummaryResponseData {
+export interface SummaryResponse {
   data: SummaryResponseItem[];
   total: number;
-}
-
-export interface SummaryResponse {
-  total: number;
-  avg: number;
-  data: SummaryResponseData;
 }
 
 export interface IncomeResponseItem {

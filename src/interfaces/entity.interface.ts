@@ -38,3 +38,14 @@ export interface Settings {
   lastNotifDate: string;
   currency: string;
 }
+
+export interface HomeStat {
+  expense: {
+    total: number
+    average: number
+  }
+  income: {
+    total: number
+    average: number
+  }
+}

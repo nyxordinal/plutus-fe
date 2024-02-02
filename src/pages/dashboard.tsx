@@ -5,11 +5,13 @@ import Loader from "@component/Loader/Loader";
 import { TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
 import AdminDashboard from "@layout/AdminDashboard";
 import { getExpenseSummary } from "@service/expense.service";
+import { getHomeStat } from "@service/home.service";
 import { getIncomeSummary } from "@service/income.service";
 import { useCurrency } from "currency";
 import { useTranslation } from "locale/translator";
 import { useEffect, useState } from "react";
 import { getExpenseSummaryState, setExpenseSummary } from "redux/expense";
+import { setHomeStat } from "redux/general";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { getIncomeSummaryState, setIncomeSummary } from "redux/income";
 
@@ -47,8 +49,6 @@ const Dashboard = () => {
     setLoading(true);
     const expensesData = await getExpenseSummary(page, dataPerPage);
     dispatch(setExpenseSummary(expensesData.data));
-    setExpenseTotal(expensesData.total);
-    setExpenseAvg(expensesData.average);
     setTotalExpenseSummaryData(expensesData.totalData)
     setLoading(false);
   };
@@ -72,8 +72,6 @@ const Dashboard = () => {
     setLoading(true);
     const incomesData = await getIncomeSummary(page, dataPerPage);
     dispatch(setIncomeSummary(incomesData.data));
-    setIncomeTotal(incomesData.total);
-    setIncomeAvg(incomesData.average);
     setTotalIncomeSummaryData(incomesData.totalData)
     setLoading(false);
   };
@@ -95,14 +93,16 @@ const Dashboard = () => {
       updateCurrency(user.currency);
       const expensesData = await getExpenseSummary(expenseSummaryPage, expenseSummaryRowsPerPage);
       const incomesData = await getIncomeSummary(incomeSummaryPage, incomeSummaryRowsPerPage);
+      const homeStatData = await getHomeStat();
       dispatch(setExpenseSummary(expensesData.data));
       dispatch(setIncomeSummary(incomesData.data));
-      setExpenseTotal(expensesData.total);
-      setExpenseAvg(expensesData.average);
+      dispatch(setHomeStat(homeStatData))
+      setExpenseTotal(homeStatData.expense.total);
+      setExpenseAvg(homeStatData.expense.average);
       setTotalExpenseSummaryData(expensesData.totalData)
       setTotalIncomeSummaryData(incomesData.totalData)
-      setIncomeTotal(incomesData.total);
-      setIncomeAvg(incomesData.average);
+      setIncomeTotal(homeStatData.income.total);
+      setIncomeAvg(homeStatData.income.average);
       setLoading(false);
     };
     if (isAuthenticated) fetchData();

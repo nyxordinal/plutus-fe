@@ -1,4 +1,4 @@
-import { Expense, Income, Summary } from "./entity.interface";
+import { Expense, HomeStat, Income, Summary } from "./entity.interface";
 
 export type Order = "asc" | "desc";
 
@@ -33,9 +33,9 @@ export interface CreateIncomeInterface {
   date: string;
 }
 
-export interface GetExpenseSummaryResult {
-  total: number;
-  average: number;
+export interface GetSummaryResult {
   data: Summary[];
   totalData: number;
 }
+
+export type GetHomeStatResult = HomeStat

@@ -1,7 +1,7 @@
 import {
   CreateIncomeInterface,
   GetAllIncomeServiceResult,
-  GetExpenseSummaryResult,
+  GetSummaryResult,
 } from "@interface/dto.interface";
 import { Income, Summary } from "@interface/entity.interface";
 import {
@@ -51,22 +51,22 @@ export const getAllIncomes = async (
   }
 };
 
-export const getIncomeSummary = async (page: number, dataPerPage: number): Promise<GetExpenseSummaryResult> => {
+export const getIncomeSummary = async (page: number, dataPerPage: number): Promise<GetSummaryResult> => {
   try {
     const r: APIResponse<SummaryResponse> = await API.get(
       getPaginationQuery(getIncomeSummaryUrl, page, dataPerPage)
     );
-    const { total, avg, data } = r.data as SummaryResponse;
-    const summaryData: Summary[] = data.data.map((incomeSummary) => {
+    const { data, total } = r.data as SummaryResponse;
+    const summaryData: Summary[] = data.map((incomeSummary) => {
       return {
         yearmonth: new Date(incomeSummary.yearmonth),
         amount: parseInt(incomeSummary.amount),
       };
     });
-    return { total: total, average: avg, data: summaryData, totalData: data.total };
+    return { data: summaryData, totalData: total };
   } catch (error) {
     logErrorResponse(error);
-    return { total: 0, average: 0, data: [], totalData: 0 };
+    return { data: [], totalData: 0 };
   }
 };
 

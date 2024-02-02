@@ -2,7 +2,7 @@ import {
   CreateExpenseInterface,
   GetAllExpenseServiceInterface,
   GetAllExpenseServiceResult,
-  GetExpenseSummaryResult,
+  GetSummaryResult,
 } from "@interface/dto.interface";
 import { Expense, Summary } from "@interface/entity.interface";
 import {
@@ -62,22 +62,22 @@ export const getAllExpenses = async (
   }
 };
 
-export const getExpenseSummary = async (page: number, dataPerPage: number): Promise<GetExpenseSummaryResult> => {
+export const getExpenseSummary = async (page: number, dataPerPage: number): Promise<GetSummaryResult> => {
   try {
     const r: APIResponse<SummaryResponse> = await API.get(
       getPaginationQuery(getExpenseSummaryUrl, { page, dataPerPage })
     );
-    const { total, avg, data } = r.data as SummaryResponse;
-    const summaryData: Summary[] = data.data.map((expenseSummary) => {
+    const { data, total } = r.data as SummaryResponse;
+    const summaryData: Summary[] = data.map((expenseSummary) => {
       return {
         yearmonth: new Date(expenseSummary.yearmonth),
         amount: parseInt(expenseSummary.amount),
       };
     });
-    return { total: total, average: avg, data: summaryData, totalData: data.total };
+    return { data: summaryData, totalData: total };
   } catch (error) {
     logErrorResponse(error);
-    return { total: 0, average: 0, data: [], totalData: 0 };
+    return { data: [], totalData: 0 };
   }
 };
 
