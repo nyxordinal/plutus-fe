@@ -2,8 +2,10 @@ import useAuth, { ProtectRoute } from "@auth";
 import CardTableCustom from "@component/Cards/CardTableCustom";
 import FooterAdmin from "@component/Footers/FooterAdmin";
 import Loader from "@component/Loader/Loader";
+import SearchBar from "@component/SearchBar/SearchBar";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
-import { TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
+import { DEFAULT_EXPENSE_SEARCH_VALUES_NAME, TABLE_ROW_PER_PAGE_OPTION } from "@interface/constant";
+import { GetAllIncomeServiceInterface } from "@interface/dto.interface";
 import Admin from "@layout/Admin";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { deleteBulkIncome, getAllIncomes } from "@service/income.service";
@@ -23,16 +25,35 @@ const IncomePage = () => {
   const [totalData, setTotalData] = useState<number>(0);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
+  const [source, setSource] = useState<string>(DEFAULT_EXPENSE_SEARCH_VALUES_NAME);
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
   const [rowsPerPage, setRowsPerPage] = useState<number>(
     TABLE_ROW_PER_PAGE_OPTION[1]
   );
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const [filterChanged, setFilterChanged] = useState<boolean>(false);
 
-  const fetchData = async (page: number) => {
+  const fetchData = async (
+    page: number,
+    source?: string,
+    startDate?: Date,
+    endDate?: Date) => {
     setLoadingData(true);
-    const { incomeData, totalData } = await getAllIncomes(page, rowsPerPage);
+    const param: GetAllIncomeServiceInterface = {
+      page,
+      dataPerPage: rowsPerPage,
+    };
+    if (source) {
+      param.source = source;
+    }
+    if (startDate !== undefined && endDate !== undefined) {
+      param.startDate = startDate;
+      param.endDate = endDate;
+    }
+    const { incomeData, totalData } = await getAllIncomes(param);
     if (incomeData.length < 1 && totalData === 0 && page > 0) {
       setPage(0);
     }
@@ -51,8 +72,22 @@ const IncomePage = () => {
       openSnackbar("success", createUpdateMsg);
   }, [createUpdateMsg]);
 
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterChanged(true);
+    setSource(event.target.value);
+  };
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFilterChanged(true);
+    setStartDate(new Date(event.target.value));
+  };
+  const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterChanged(true);
+    setEndDate(new Date(event.target.value));
+  };
   const handleChangePage = (event: unknown, newPage: number) => {
-    fetchData(newPage + 1);
+    fetchData(newPage + 1, source, startDate, endDate);
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (
@@ -67,6 +102,19 @@ const IncomePage = () => {
       await fetchData(1);
       openSnackbar("success", "Delete incomes success");
     } else openSnackbar("error", `Delete incomes failed, ${result.message}`);
+  };
+  const handleApplyFilter = () => {
+    setPage(0);
+    fetchData(page, source, startDate, endDate);
+    setFilterChanged(false);
+  };
+  const handleClearFilter = () => {
+    setFilterChanged(false);
+    setPage(0);
+    setSource("");
+    setStartDate(undefined);
+    setEndDate(undefined);
+    fetchData(1);
   };
 
   const openSnackbar = (type: AlertColor, message: string) => {
@@ -96,8 +144,17 @@ const IncomePage = () => {
           severity={severity}
           onHandleClose={handleClose}
         />
-        {/* div for spaces between title and content */}
-        <div className="relative bg-blueGray-800 md:pt-16 pb-32 pt-12" />
+        <SearchBar
+          name={source}
+          startDate={startDate}
+          endDate={endDate}
+          isFilterChanged={filterChanged}
+          onNameChange={handleNameChange}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+          onApplyFilter={handleApplyFilter}
+          onClearFilter={handleClearFilter}
+        />
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           <div className="flex flex-wrap mt-4">
             <div className="w-full mb-12 px-4">

@@ -22,6 +22,14 @@ export interface GetAllExpenseServiceInterface {
   name?: string;
 }
 
+export interface GetAllIncomeServiceInterface {
+  page: number;
+  dataPerPage: number;
+  startDate?: Date;
+  endDate?: Date;
+  source?: string;
+}
+
 export interface GetAllIncomeServiceResult {
   incomeData: Income[];
   totalData: number;

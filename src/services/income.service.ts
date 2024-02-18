@@ -1,5 +1,6 @@
 import {
   CreateIncomeInterface,
+  GetAllIncomeServiceInterface,
   GetAllIncomeServiceResult,
   GetSummaryResult,
 } from "@interface/dto.interface";
@@ -18,22 +19,27 @@ import { API } from "api";
 const getIncomeSummaryUrl = "/income/summary"
 const getAllIncomesUrl = "/income"
 
-const getPaginationQuery = (url: string, page: number, dataPerPage: number): string => {
-  page === 0
+const getPaginationQuery = (url: string, params: GetAllIncomeServiceInterface): string => {
+  params.page === 0
     ? (url = url.concat("?page=1"))
-    : (url = url.concat("?page=" + page.toString()));
-  dataPerPage === 0
+    : (url = url.concat("?page=" + params.page.toString()));
+  params.dataPerPage === 0
     ? (url = url.concat("&count=5"))
-    : (url = url.concat("&count=" + dataPerPage.toString()));
+    : (url = url.concat("&count=" + params.dataPerPage.toString()));
+  if (params.startDate !== undefined)
+    url = url.concat("&start=" + params.startDate.toISOString());
+  if (params.endDate !== undefined)
+    url = url.concat("&end=" + params.endDate.toISOString());
+  if (params.source !== undefined && params.source !== "")
+    url = url.concat("&source=" + params.source);
   return url;
 };
 export const getAllIncomes = async (
-  page: number,
-  dataPerPage: number
+  params: GetAllIncomeServiceInterface
 ): Promise<GetAllIncomeServiceResult> => {
   try {
     const r: APIResponse<IncomeResponse> = await API.get(
-      getPaginationQuery(getAllIncomesUrl, page, dataPerPage)
+      getPaginationQuery(getAllIncomesUrl, params)
     );
     const { data, total } = r.data as IncomeResponse;
     const incomeData: Income[] = data.map((income) => {
@@ -54,7 +60,7 @@ export const getAllIncomes = async (
 export const getIncomeSummary = async (page: number, dataPerPage: number): Promise<GetSummaryResult> => {
   try {
     const r: APIResponse<SummaryResponse> = await API.get(
-      getPaginationQuery(getIncomeSummaryUrl, page, dataPerPage)
+      getPaginationQuery(getIncomeSummaryUrl, { page, dataPerPage })
     );
     const { data, total } = r.data as SummaryResponse;
     const summaryData: Summary[] = data.map((incomeSummary) => {
