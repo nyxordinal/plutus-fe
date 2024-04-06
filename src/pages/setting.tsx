@@ -20,6 +20,7 @@ const Setting = () => {
 
   const [loadingPage, setLoadingPage] = useState<boolean>(true);
   const [expenseLimit, setExpenseLimit] = useState<string>("0");
+  const [dailyExpenseLimit, setDailyExpenseLimit] = useState<string>("0");
   const [lastNotifDate, setLastNotifDate] = useState<string>("");
   const [currencyInput, setCurrencyInput] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
@@ -28,8 +29,9 @@ const Setting = () => {
 
   const fetchData = async () => {
     setLoadingPage(true);
-    const { expenseLimit, lastNotifDate, currency } = await getAllSettings();
+    const { expenseLimit, expenseLimitDaily, lastNotifDate, currency } = await getAllSettings();
     setExpenseLimit(expenseLimit.toString());
+    setDailyExpenseLimit(expenseLimitDaily.toString());
     setLastNotifDate(lastNotifDate);
     setCurrencyInput(currency);
   };
@@ -44,6 +46,9 @@ const Setting = () => {
   const handleExpenseLimitChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => setExpenseLimit(parseFloat(event.target.value).toFixed(2));
+  const handleDailyExpenseLimitChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => setDailyExpenseLimit(parseFloat(event.target.value).toFixed(2));
   const handleCurrencyChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -51,6 +56,7 @@ const Setting = () => {
     const update = async () => {
       const result = await updateSettings({
         expenseLimit: parseFloat(expenseLimit),
+        expenseLimitDaily: parseFloat(dailyExpenseLimit),
         isResetNotif: false,
         currency: event.target.value,
       });
@@ -77,6 +83,20 @@ const Setting = () => {
     const update = async () => {
       const result = await updateSettings({
         expenseLimit: parseFloat(expenseLimit),
+        expenseLimitDaily: parseFloat(dailyExpenseLimit),
+        isResetNotif: false,
+        currency: currencyInput,
+      });
+      if (result.success) openSnackbar("success", result.message);
+      else openSnackbar("error", result.message);
+    };
+    update();
+  };
+  const handleSaveDailyExpenseLimit = () => {
+    const update = async () => {
+      const result = await updateSettings({
+        expenseLimit: parseFloat(expenseLimit),
+        expenseLimitDaily: parseFloat(dailyExpenseLimit),
         isResetNotif: false,
         currency: currencyInput,
       });
@@ -89,6 +109,7 @@ const Setting = () => {
     const resetNotif = async () => {
       const result = await updateSettings({
         expenseLimit: parseFloat(expenseLimit),
+        expenseLimitDaily: parseFloat(dailyExpenseLimit),
         isResetNotif: true,
         currency: currencyInput,
       });
@@ -138,11 +159,14 @@ const Setting = () => {
               <CardSettings
                 user={user}
                 expenseLimit={expenseLimit}
+                dailyExpenseLimit={dailyExpenseLimit}
                 lastNotifDate={lastNotifDate}
                 currency={currencyInput}
                 onChangeExpenseLimit={handleExpenseLimitChange}
+                onChangeDailyExpenseLimit={handleDailyExpenseLimitChange}
                 onChangeCurrency={handleCurrencyChange}
                 saveExpenseLimit={handleSaveExpenseLimit}
+                saveDailyExpenseLimit={handleSaveDailyExpenseLimit}
                 resetNotification={handleResetNotification}
                 onEnglishLocaleClick={handleEnglishLocale}
                 onBahasaLocaleClick={handleBahasaLocale}

@@ -85,6 +85,7 @@ export interface IncomeResponse {
 
 export interface SettingsRequest {
   expenseLimit: number;
+  expenseLimitDaily: number;
   isResetNotif: boolean;
   currency: string;
 }

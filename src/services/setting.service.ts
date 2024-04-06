@@ -15,7 +15,7 @@ export const getAllSettings = async (): Promise<Settings> => {
     return snakeCaseKeysToCamelCase(settings);
   } catch (error) {
     logErrorResponse(error);
-    return { expenseLimit: 0, lastNotifDate: "", currency: "" };
+    return { expenseLimit: 0, expenseLimitDaily: 0, lastNotifDate: "", currency: "" };
   }
 };
 
@@ -25,6 +25,7 @@ export const updateSettings = async (
   try {
     const r: APIResponse<null> = await API.put("/setting", {
       expense_limit: settings.expenseLimit,
+      expense_limit_daily: settings.expenseLimitDaily,
       is_reset_notif: settings.isResetNotif,
       currency: settings.currency,
     });

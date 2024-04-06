@@ -35,6 +35,7 @@ export interface Summary {
 
 export interface Settings {
   expenseLimit: number;
+  expenseLimitDaily: number;
   lastNotifDate: string;
   currency: string;
 }

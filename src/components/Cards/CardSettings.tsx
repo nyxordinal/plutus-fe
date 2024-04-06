@@ -6,11 +6,14 @@ import { useRouter } from "next/router";
 type PropType = {
   user: User;
   expenseLimit: string;
+  dailyExpenseLimit: string;
   lastNotifDate: string;
   currency: string;
   saveExpenseLimit: () => void;
+  saveDailyExpenseLimit: () => void;
   resetNotification: () => void;
   onChangeExpenseLimit: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeDailyExpenseLimit: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeCurrency: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onEnglishLocaleClick: () => void;
   onBahasaLocaleClick: () => void;
@@ -19,11 +22,14 @@ type PropType = {
 export default function CardSettings({
   user,
   expenseLimit,
+  dailyExpenseLimit,
   lastNotifDate,
   currency,
   onChangeExpenseLimit,
+  onChangeDailyExpenseLimit,
   onChangeCurrency,
   saveExpenseLimit,
+  saveDailyExpenseLimit,
   resetNotification,
   onEnglishLocaleClick,
   onBahasaLocaleClick,
@@ -87,7 +93,7 @@ export default function CardSettings({
             <hr className="mt-6 border-b-1 border-blueGray-300" />
 
             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-              {translate("reminderNotif")}
+              {translate("expenseLimit")}
             </h6>
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 px-4">
@@ -156,6 +162,44 @@ export default function CardSettings({
             <hr className="mt-6 border-b-1 border-blueGray-300" />
 
             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+              {translate("dailyExpenseLimit")}
+            </h6>
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label
+                  className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="input-expense-limit"
+                >
+                  {translate("dailyExpenseLimit")}
+                </label>
+                <input
+                  id="input-expense-limit"
+                  type="number"
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  defaultValue="0"
+                  value={dailyExpenseLimit}
+                  onChange={onChangeDailyExpenseLimit}
+                />
+              </div>
+            </div>
+            <div className="w-full lg:w-6/12 px-4 mt-3">
+              <div className="relative w-full">
+                <button
+                  className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={saveDailyExpenseLimit}
+                >
+                  {translate("saveDailyExpenseLimitBtn")}
+                </button>
+                <h1 className="mt-3">
+                  *{translate("saveDailyExpenseLimitBtnDesc")}
+                </h1>
+              </div>
+            </div>
+
+            <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+            <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
               {translate("currency")}
             </h6>
             <div className="w-full lg:w-6/12 px-4">
@@ -184,11 +228,10 @@ export default function CardSettings({
             <div className="w-full lg:w-6/12 px-4 mt-3">
               <div className="relative w-full">
                 <button
-                  className={`${
-                    router.locale === "en"
-                      ? "bg-blueGray-400"
-                      : "bg-blueGray-700 active:bg-blueGray-600"
-                  } text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150`}
+                  className={`${router.locale === "en"
+                    ? "bg-blueGray-400"
+                    : "bg-blueGray-700 active:bg-blueGray-600"
+                    } text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150`}
                   type="button"
                   disabled={router.locale === "en"}
                   onClick={onEnglishLocaleClick}
@@ -196,11 +239,10 @@ export default function CardSettings({
                   English
                 </button>
                 <button
-                  className={`${
-                    router.locale === "id"
-                      ? "bg-blueGray-400"
-                      : "bg-blueGray-700 active:bg-blueGray-600"
-                  } text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150`}
+                  className={`${router.locale === "id"
+                    ? "bg-blueGray-400"
+                    : "bg-blueGray-700 active:bg-blueGray-600"
+                    } text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150`}
                   type="button"
                   disabled={router.locale === "id"}
                   onClick={onBahasaLocaleClick}

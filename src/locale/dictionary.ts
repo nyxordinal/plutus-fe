@@ -59,12 +59,15 @@ export const DICTIONARY: Dictionary = {
     myAccount: "My Account",
     userInformation: "User Information",
     emailAddress: "Email Address",
-    reminderNotif: "Reminder Notification",
     expenseLimit: "Expense Limit",
+    dailyExpenseLimit: "Daily Expense Limit",
     lastNotifDate: "Last Notification Date",
     saveExpenseLimitBtn: "Save Expense Limit",
+    saveDailyExpenseLimitBtn: "Save Daily Expense Limit",
     saveExpenseLimitBtnDesc:
       "A notification will be sent via email if your expenses exceed the limit",
+    saveDailyExpenseLimitBtnDesc:
+      "A notification will be sent via email if your daily expenses exceed the limit",
     resetNotifBtn: "Reset Notification",
     resetNotifBtnDesc:
       "Resetting the notification will enable it to be sent again via email whenever you exceed your expense limit",
@@ -149,12 +152,15 @@ export const DICTIONARY: Dictionary = {
     myAccount: "Akun Saya",
     userInformation: "Informasi Pengguna",
     emailAddress: "Alamat Email",
-    reminderNotif: "Notifikasi Pengingat",
     expenseLimit: "Batas Pengeluaran",
+    dailyExpenseLimit: "Batas Pengeluaran Harian",
     lastNotifDate: "Tanggal Notifikasi Terakhir",
     saveExpenseLimitBtn: "Simpan Batas Pengeluaran",
+    saveDailyExpenseLimitBtn: "Simpan Batas Pengeluaran Harian",
     saveExpenseLimitBtnDesc:
       "Notifikasi akan dikirimkan melalui email jika pengeluaran Anda melebihi batas",
+    saveDailyExpenseLimitBtnDesc:
+      "Notifikasi akan dikirimkan melalui email jika pengeluaran harian Anda melebihi batas",
     resetNotifBtn: "Atur Ulang Notifikasi",
     resetNotifBtnDesc:
       "Menyetel ulang pemberitahuan akan memungkinkannya dikirim lagi melalui email setiap kali Anda melebihi batas pengeluaran Anda",
