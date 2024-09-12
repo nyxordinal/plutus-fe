@@ -4,7 +4,11 @@ import Loader from "@component/Loader/Loader";
 import AdminNavbar from "@component/Navbars/AdminNavbar";
 import Sidebar from "@component/Sidebar/Sidebar";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
-import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import {
+  AlertColor,
+  CircularProgress,
+  SnackbarCloseReason,
+} from "@mui/material";
 import { createIncome } from "@service/income.service";
 import { formatDateSimple } from "@util";
 import { useTranslation } from "locale/translator";
@@ -25,6 +29,7 @@ const Create = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSourceChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSource(event.target.value);
@@ -36,12 +41,14 @@ const Create = () => {
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setDate(new Date(event.target.value));
   const handleSubmit = () => {
+    setIsLoading(true);
     const create = async () => {
       const result = await createIncome({
         source,
         amount,
         date: formatDateSimple(date),
       });
+      setIsLoading(false);
       if (result.success) {
         dispatch(setIncomeMessage(result.message));
         router.push("/income");
@@ -131,8 +138,13 @@ const Create = () => {
                 className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
                 onClick={handleSubmit}
+                disabled={isLoading}
               >
-                {translate("createIncome")}
+                {isLoading ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  translate("createIncome")
+                )}
               </button>
             </div>
           </div>
