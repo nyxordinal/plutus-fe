@@ -6,7 +6,7 @@ import Sidebar from "@component/Sidebar/Sidebar";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import { TableItem } from "@interface/entity.interface";
 import { EXPENSE_TYPE } from "@interface/enum";
-import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { AlertColor, CircularProgress, SnackbarCloseReason } from "@mui/material";
 import { updateExpense } from "@service/expense.service";
 import { enumToArray, formatDateSimple, useLocalStorage } from "@util";
 import { useTranslation } from "locale/translator";
@@ -39,6 +39,7 @@ const Update = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setName(updateData.name);
@@ -48,6 +49,7 @@ const Update = () => {
   }, []);
 
   const handleSubmit = () => {
+    setIsLoading(true);
     const update = async () => {
       const result = await updateExpense({
         id: updateData.id,
@@ -56,6 +58,7 @@ const Update = () => {
         price,
         date,
       });
+      setIsLoading(false);
       if (result.success) {
         openSnackbar("success", "Update expense success");
         setUpdateData({
@@ -174,7 +177,11 @@ const Update = () => {
                   handleSubmit();
                 }}
               >
-                {translate("updateExpense")}
+                {isLoading ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  translate("updateExpense")
+                )}
               </button>
             </div>
           </div>

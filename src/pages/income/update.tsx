@@ -5,7 +5,7 @@ import AdminNavbar from "@component/Navbars/AdminNavbar";
 import Sidebar from "@component/Sidebar/Sidebar";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import { TableItem } from "@interface/entity.interface";
-import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { AlertColor, CircularProgress, SnackbarCloseReason } from "@mui/material";
 import { updateIncome } from "@service/income.service";
 import { formatDateSimple, useLocalStorage } from "@util";
 import { useTranslation } from "locale/translator";
@@ -36,6 +36,7 @@ const Update = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setSource(updateData.name);
@@ -44,6 +45,7 @@ const Update = () => {
   }, []);
 
   const handleSubmit = () => {
+    setIsLoading(true);
     const update = async () => {
       const result = await updateIncome({
         id: updateData.id,
@@ -51,6 +53,7 @@ const Update = () => {
         amount,
         date,
       });
+      setIsLoading(false);
       if (result.success) {
         openSnackbar("success", "Update income success");
         setUpdateData({
@@ -161,7 +164,11 @@ const Update = () => {
                   handleSubmit();
                 }}
               >
-                {translate("updateIncome")}
+                {isLoading ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  translate("updateIncome")
+                )}
               </button>
             </div>
           </div>
