@@ -37,7 +37,6 @@ const ExpensePage = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
-  const [filterChanged, setFilterChanged] = useState<boolean>(false);
 
   const fetchData = async (
     page: number,
@@ -77,17 +76,14 @@ const ExpensePage = () => {
   }, [createUpdateMsg]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterChanged(true);
     setName(event.target.value);
   };
   const handleStartDateChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setFilterChanged(true);
     setStartDate(new Date(event.target.value));
   };
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterChanged(true);
     setEndDate(new Date(event.target.value));
   };
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -110,10 +106,8 @@ const ExpensePage = () => {
   const handleApplyFilter = () => {
     setPage(0);
     fetchData(page, name, startDate, endDate);
-    setFilterChanged(false);
   };
   const handleClearFilter = () => {
-    setFilterChanged(false);
     setPage(0);
     setName("");
     setStartDate(undefined);
@@ -152,7 +146,6 @@ const ExpensePage = () => {
           name={name}
           startDate={startDate}
           endDate={endDate}
-          isFilterChanged={filterChanged}
           onNameChange={handleNameChange}
           onStartDateChange={handleStartDateChange}
           onEndDateChange={handleEndDateChange}

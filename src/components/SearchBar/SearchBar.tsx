@@ -5,7 +5,6 @@ type PropType = {
   name: string;
   startDate: Date | undefined;
   endDate: Date | undefined;
-  isFilterChanged: boolean;
   onNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onStartDateChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onEndDateChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,7 +13,6 @@ type PropType = {
 };
 
 const SearchBar = ({
-  isFilterChanged,
   name,
   startDate,
   endDate,
@@ -69,16 +67,26 @@ const SearchBar = ({
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-                  {isFilterChanged
-                    ? translate("applyFilter")
-                    : translate("clearFilter")}
+                  {translate("applyFilter")}
                 </h6>
                 <button
                   className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
-                  onClick={isFilterChanged ? onApplyFilter : onClearFilter}
+                  onClick={onApplyFilter}
                 >
-                  {isFilterChanged ? translate("submit") : translate("clear")}
+                  {translate("submit")}
+                </button>
+              </div>
+              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
+                  {translate("clearFilter")}
+                </h6>
+                <button
+                  className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={onClearFilter}
+                >
+                  {translate("clear")}
                 </button>
               </div>
             </div>
