@@ -31,6 +31,8 @@ const getPaginationQuery = (url: string, params: GetAllExpenseServiceInterface):
     url = url.concat("&end=" + params.endDate.toISOString());
   if (params.name !== undefined && params.name !== "")
     url = url.concat("&name=" + params.name);
+  if (params.type !== undefined)
+    url = url.concat("&type=" + params.type.toString());
   return url;
 };
 

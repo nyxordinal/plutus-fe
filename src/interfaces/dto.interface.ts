@@ -20,6 +20,7 @@ export interface GetAllExpenseServiceInterface {
   startDate?: Date;
   endDate?: Date;
   name?: string;
+  type?: number;
 }
 
 export interface GetAllIncomeServiceInterface {

@@ -30,6 +30,7 @@ const ExpensePage = () => {
   const [name, setName] = useState<string>(DEFAULT_EXPENSE_SEARCH_VALUES_NAME);
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const [type, setType] = useState<number>();
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(
     TABLE_ROW_PER_PAGE_OPTION[1]
@@ -42,7 +43,8 @@ const ExpensePage = () => {
     page: number,
     name?: string,
     startDate?: Date,
-    endDate?: Date
+    endDate?: Date,
+    type?: number
   ) => {
     setLoadingData(true);
     const param: GetAllExpenseServiceInterface = {
@@ -56,6 +58,9 @@ const ExpensePage = () => {
       param.startDate = startDate;
       param.endDate = endDate;
     }
+    if (type !== undefined) {
+      param.type = type;
+    }
     const { expenseData, totalData } = await getAllExpenses(param);
     if (expenseData.length < 1 && totalData === 0 && page > 0) {
       setPage(0);
@@ -67,7 +72,7 @@ const ExpensePage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetchData(page + 1, name, startDate, endDate);
+      fetchData(page + 1, name, startDate, endDate, type);
     }
   }, [isAuthenticated, rowsPerPage]);
   useEffect(() => {
@@ -86,8 +91,12 @@ const ExpensePage = () => {
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndDate(new Date(event.target.value));
   };
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    setType(value === "" ? undefined : parseInt(value, 10));
+  };
   const handleChangePage = (event: unknown, newPage: number) => {
-    fetchData(newPage + 1, name, startDate, endDate);
+    fetchData(newPage + 1, name, startDate, endDate, type);
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (
@@ -99,19 +108,20 @@ const ExpensePage = () => {
   const handleDeleteClick = async (rowIds: number[]) => {
     const result = await deleteBulkExpense(rowIds);
     if (result.success) {
-      await fetchData(1, name, startDate, endDate);
+      await fetchData(1, name, startDate, endDate, type);
       openSnackbar("success", "Delete expenses success");
     } else openSnackbar("error", `Delete expenses failed, ${result.message}`);
   };
   const handleApplyFilter = () => {
     setPage(0);
-    fetchData(page, name, startDate, endDate);
+    fetchData(page, name, startDate, endDate, type);
   };
   const handleClearFilter = () => {
     setPage(0);
     setName("");
     setStartDate(undefined);
     setEndDate(undefined);
+    setType(undefined);
     fetchData(1);
   };
 
@@ -146,9 +156,12 @@ const ExpensePage = () => {
           name={name}
           startDate={startDate}
           endDate={endDate}
+          type={type}
+          showTypeFilter={true}
           onNameChange={handleNameChange}
           onStartDateChange={handleStartDateChange}
           onEndDateChange={handleEndDateChange}
+          onTypeChange={handleTypeChange}
           onApplyFilter={handleApplyFilter}
           onClearFilter={handleClearFilter}
         />

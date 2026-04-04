@@ -142,6 +142,7 @@ const IncomePage = () => {
           name={source}
           startDate={startDate}
           endDate={endDate}
+          showTypeFilter={false}
           onNameChange={handleNameChange}
           onStartDateChange={handleStartDateChange}
           onEndDateChange={handleEndDateChange}
