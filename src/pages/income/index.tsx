@@ -48,8 +48,10 @@ const IncomePage = () => {
     if (source) {
       param.source = source;
     }
-    if (startDate !== undefined && endDate !== undefined) {
+    if (startDate !== undefined) {
       param.startDate = startDate;
+    }
+    if (endDate !== undefined) {
       param.endDate = endDate;
     }
     const { incomeData, totalData } = await getAllIncomes(param);

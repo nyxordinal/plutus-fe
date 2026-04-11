@@ -54,8 +54,10 @@ const ExpensePage = () => {
     if (name) {
       param.name = name;
     }
-    if (startDate !== undefined && endDate !== undefined) {
+    if (startDate !== undefined) {
       param.startDate = startDate;
+    }
+    if (endDate !== undefined) {
       param.endDate = endDate;
     }
     if (type !== undefined) {
