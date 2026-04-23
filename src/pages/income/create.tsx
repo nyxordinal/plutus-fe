@@ -90,6 +90,12 @@ const Create = () => {
         />
         <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">
           <div className="px-4 md:px-10 mx-auto w-full">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
             <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">
               <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
                 {translate("source")}
@@ -136,8 +142,7 @@ const Create = () => {
             <div className="lg:w-6/12 xl:w-3/12 px-4">
               <button
                 className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="button"
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -147,6 +152,7 @@ const Create = () => {
                 )}
               </button>
             </div>
+            </form>
           </div>
         </div>
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
