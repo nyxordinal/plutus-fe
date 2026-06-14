@@ -167,6 +167,7 @@ const IncomePage = () => {
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleDeleteClick={handleDeleteClick}
                 items={incomes}
+                showTypeColumn={false}
               />
             </div>
           </div>

@@ -24,6 +24,7 @@ type PropType = {
   handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDeleteClick: (ids: number[]) => Promise<void>;
   items: Expense[] | Income[];
+  showTypeColumn?: boolean;
 };
 
 function instanceOfExpense(object: any): object is Expense {
@@ -44,6 +45,7 @@ const CardTableCustom = ({
   handleChangeRowsPerPage,
   handleDeleteClick,
   items,
+  showTypeColumn = true,
 }: PropType) => {
   const { translate } = useTranslation();
   const { currency } = useCurrency();
@@ -113,16 +115,18 @@ const CardTableCustom = ({
                 >
                   {translate("date")}
                 </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
-                  }
-                >
-                  {translate("type")}
-                </th>
+                {showTypeColumn && (
+                  <th
+                    className={
+                      "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                      (color === "light"
+                        ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                        : "bg-blueGray-600 text-blueGray-200 border-blueGray-500")
+                    }
+                  >
+                    {translate("type")}
+                  </th>
+                )}
                 <th
                   className={
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-right " +
@@ -138,6 +142,22 @@ const CardTableCustom = ({
             <tbody>
               {loadingTable ? (
                 <Loader isFullHeightScreen={false} />
+              ) : items.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4 text-center"
+                  >
+                    <div className="py-8">
+                      <p className="text-blueGray-400 text-lg mb-2">
+                        {translate("no_data_recorded")}
+                      </p>
+                      <p className="text-blueGray-300 text-sm">
+                        {`${translate("get_started_by_creating_first")} ${name.toLowerCase()}`}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
               ) : (
                 items
                   .map((row, index): TableItem => {
@@ -172,9 +192,11 @@ const CardTableCustom = ({
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4">
                           {formatDateSimple(row.date)}
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4">
-                          {EXPENSE_TYPE[row.type]}
-                        </td>
+                        {showTypeColumn && (
+                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4">
+                            {EXPENSE_TYPE[row.type]}
+                          </td>
+                        )}
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-base whitespace-nowrap p-4 text-right">
                           <TableDropdownCustom
                             item={row}

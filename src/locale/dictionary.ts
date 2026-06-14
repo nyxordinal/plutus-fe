@@ -100,6 +100,8 @@ export const DICTIONARY: Dictionary = {
     account: "Account",
     loginToYourAccount: "Login to your account",
     currency: "Currency",
+    no_data_recorded: "No records yet",
+    get_started_by_creating_first: "Get started by creating your first",
   },
   id: {
     mainTitle:
@@ -194,5 +196,7 @@ export const DICTIONARY: Dictionary = {
     account: "Akun",
     loginToYourAccount: "Masuk ke akun anda",
     currency: "Mata Uang",
+    no_data_recorded: "Belum ada catatan",
+    get_started_by_creating_first: "Mulai dengan membuat"
   },
 };
