@@ -1,9 +1,9 @@
 import { TableItem } from "@interface/entity.interface";
-import { createPopper } from "@popperjs/core";
 import { useLocalStorage } from "@util";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import { createRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type PropType = {
   item: TableItem;
@@ -20,6 +20,8 @@ const TableDropdownCustom = ({
 }: PropType) => {
   const router = useRouter();
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
+  const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
+  const btnRef = useRef<HTMLAnchorElement>(null);
   const [updateData, setUpdateData] = useLocalStorage<TableItem>(
     updateDataKey,
     {
@@ -30,63 +32,81 @@ const TableDropdownCustom = ({
       date: new Date(),
     }
   );
-  const btnDropdownRef = createRef<any>();
-  const popoverDropdownRef = createRef<any>();
   const openDropdownPopover = () => {
-    createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
-      placement: "left-start",
-    });
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setButtonPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.right + window.scrollX,
+      });
+    }
     setDropdownPopoverShow(true);
   };
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+  useEffect(() => {
+    if (!dropdownPopoverShow) return;
+    const handleClickOutside = () => closeDropdownPopover();
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [dropdownPopoverShow]);
   return (
     <>
-      <a
-        className="text-blueGray-500 py-1 px-3"
-        href="#pablo"
-        ref={btnDropdownRef}
-        onClick={(e) => {
-          e.preventDefault();
-          dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
-        }}
-      >
-        <i className="fas fa-ellipsis-v"></i>
-      </a>
-      <div
-        ref={popoverDropdownRef}
-        className={
-          (dropdownPopoverShow ? "block " : "hidden ") +
-          "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
-        }
-      >
+      <div className="inline-block text-left">
         <a
+          ref={btnRef}
+          className="text-blueGray-500 py-1 px-3"
           href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
           onClick={(e) => {
             e.preventDefault();
-            setUpdateData(item);
-            router.push(updatePageUrl);
+            e.stopPropagation();
+            dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
           }}
         >
-          Update
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => {
-            handleDeleteClick([item.id]);
-            e.preventDefault();
-          }}
-        >
-          Delete
+          <i className="fas fa-ellipsis-v"></i>
         </a>
       </div>
+      {dropdownPopoverShow &&
+        createPortal(
+          <div
+            className="fixed bg-white text-base z-50 py-2 list-none text-left rounded shadow-lg min-w-48"
+            style={{
+              top: `${buttonPosition.top}px`,
+              left: `calc(${buttonPosition.left}px - 200px)`,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <a
+              href="#pablo"
+              className={
+                "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-blueGray-50"
+              }
+              onClick={(e) => {
+                e.preventDefault();
+                setUpdateData(item);
+                closeDropdownPopover();
+                router.push(updatePageUrl);
+              }}
+            >
+              Update
+            </a>
+            <a
+              href="#pablo"
+              className={
+                "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-blueGray-50"
+              }
+              onClick={(e) => {
+                e.preventDefault();
+                closeDropdownPopover();
+                handleDeleteClick([item.id]);
+              }}
+            >
+              Delete
+            </a>
+          </div>,
+          document.body
+        )}
     </>
   );
 };
