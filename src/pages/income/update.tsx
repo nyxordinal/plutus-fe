@@ -103,38 +103,40 @@ const Update = () => {
       severity={severity}
       onHandleClose={handleClose}
     >
-      <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">
+      <div className="w-full px-4 mb-3">
         <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
           {translate("source")}
         </h6>
-        <input
-          className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
-          type="text"
+        <textarea
+          className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full min-h-[88px] resize-y"
           value={source}
           onChange={handleSourceChange}
+          rows={2}
         />
       </div>
-      <div className="lg:w-6/12 xl:w-3/12 px-4 mb-3">
-        <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-          {translate("amount")}
-        </h6>
-        <input
-          className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
-          type="number"
-          value={amount}
-          onChange={handleAmountChange}
-        />
-      </div>
-      <div className="lg:w-6/12 xl:w-3/12 px-4 mb-8">
-        <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
-          {translate("incomeDate")}
-        </h6>
-        <input
-          className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
-          type="date"
-          value={formatDateSimple(date)}
-          onChange={handleDateChange}
-        />
+      <div className="flex flex-col md:flex-row w-full">
+        <div className="w-full md:w-1/2 px-4 mb-3">
+          <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
+            {translate("incomeDate")}
+          </h6>
+          <input
+            className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+            type="date"
+            value={formatDateSimple(date)}
+            onChange={handleDateChange}
+          />
+        </div>
+        <div className="w-full md:w-1/2 px-4 mb-3">
+          <h6 className="text-xl font-normal leading-normal mt-0 mb-2 text-white">
+            {translate("amount")}
+          </h6>
+          <input
+            className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+            type="number"
+            value={amount.toString()}
+            onChange={handleAmountChange}
+          />
+        </div>
       </div>
     </RecordFormLayout>
   );

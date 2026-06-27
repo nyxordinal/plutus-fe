@@ -54,16 +54,16 @@ const RecordFormLayout = ({
               e.preventDefault();
               onSubmit();
             }}
-            className="px-4 md:px-10 mx-auto w-full"
+            className="px-4 md:px-10 mx-auto w-full max-w-4xl rounded-lg bg-white/10 p-4 md:p-8"
           >
             {children}
-            <div className="lg:w-6/12 xl:w-3/12 px-4">
+            <div className="w-full px-4 mt-2">
               <button
-                className="bg-white text-blueGray-800 active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                className="w-full bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-sm px-6 py-3 rounded-lg shadow-md hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? <CircularProgress size={20} /> : submitLabel}
+                {isLoading ? <CircularProgress size={20} color="inherit" /> : submitLabel}
               </button>
             </div>
           </form>
