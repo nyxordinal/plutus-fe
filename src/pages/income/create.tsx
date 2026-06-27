@@ -23,8 +23,9 @@ const Create = () => {
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSourceChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setSource(event.target.value);
+  const handleSourceChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setSource(event.target.value);
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     isNaN(parseInt(event.target.value, 10))
       ? setAmount(0)

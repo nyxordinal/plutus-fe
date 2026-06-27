@@ -26,6 +26,16 @@ const Update = () => {
       date: new Date(),
     }
   );
+
+  const clearUpdateData = () => {
+    setUpdateData({
+      id: 0,
+      name: "",
+      type: 0,
+      price: 0,
+      date: new Date(),
+    });
+  };
   const [source, setSource] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [date, setDate] = useState<Date>(new Date());
@@ -35,9 +45,21 @@ const Update = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!updateData.id) {
+      clearUpdateData();
+      router.replace("/income");
+      return;
+    }
+
     setSource(updateData.name);
     setAmount(updateData.price);
     setDate(new Date(updateData.date));
+  }, [router, updateData.date, updateData.id, updateData.name, updateData.price]);
+
+  useEffect(() => {
+    return () => {
+      clearUpdateData();
+    };
   }, []);
 
   const handleSubmit = () => {
@@ -52,13 +74,7 @@ const Update = () => {
       setIsLoading(false);
       if (result.success) {
         openSnackbar("success", "Update income success");
-        setUpdateData({
-          id: 0,
-          name: "",
-          type: 0,
-          price: 0,
-          date: new Date(),
-        });
+        clearUpdateData();
         dispatch(setIncomeMessage(result.message));
         router.push("/income");
       } else openSnackbar("error", result.message);
@@ -80,8 +96,9 @@ const Update = () => {
     }
     setOpen(false);
   };
-  const handleSourceChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setSource(event.target.value);
+  const handleSourceChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setSource(event.target.value);
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     isNaN(parseInt(event.target.value, 10))
       ? setAmount(0)

@@ -27,8 +27,9 @@ const Create = () => {
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setName(event.target.value);
+  const handleNameChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setName(event.target.value);
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
     setType(parseInt(event.target.value, 10));
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {

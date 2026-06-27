@@ -1,3 +1,4 @@
+import Loader from "@component/Loader/Loader";
 import { AuthAPI } from "@api";
 import { AUTH_TOKEN_KEY } from "@interface/constant";
 import { User } from "@interface/entity.interface";
@@ -225,18 +226,41 @@ export default function useAuth(): AuthContextType {
 export const ProtectRoute = (
   Page: ComponentType,
   isAuthRoute = false
-): (() => JSX.Element) => {
+): (() => JSX.Element | null) => {
   return () => {
     const router = useRouter();
     const { isAuthenticated, loading, user } = useAuth();
+
     useEffect(() => {
-      if (isAuthenticated && isAuthRoute) {
-        router.push("/dashboard");
+      if (loading) return;
+
+      if (isAuthRoute) {
+        if (isAuthenticated) {
+          router.replace("/dashboard");
+        }
+        return;
       }
-      if (!isAuthenticated && !isAuthRoute) {
-        router.push("/login");
+
+      if (!isAuthenticated) {
+        router.replace("/login");
       }
-    }, [loading, isAuthenticated, user]);
+    }, [loading, isAuthenticated, isAuthRoute, router]);
+
+    if (loading) {
+      return <Loader />;
+    }
+
+    if (isAuthRoute) {
+      if (isAuthenticated) {
+        return null;
+      }
+
+      return <Page />;
+    }
+
+    if (!isAuthenticated) {
+      return null;
+    }
 
     return <Page />;
   };

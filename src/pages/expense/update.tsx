@@ -28,6 +28,16 @@ const Update = () => {
       date: new Date(),
     }
   );
+
+  const clearUpdateData = () => {
+    setUpdateData({
+      id: 0,
+      name: "",
+      type: 0,
+      price: 0,
+      date: new Date(),
+    });
+  };
   const [name, setName] = useState<string>("");
   const [type, setType] = useState<number>(1);
   const [price, setPrice] = useState<number>(0);
@@ -38,10 +48,22 @@ const Update = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!updateData.id) {
+      clearUpdateData();
+      router.replace("/expense");
+      return;
+    }
+
     setName(updateData.name);
     setType(updateData.type);
     setPrice(updateData.price);
     setDate(new Date(updateData.date));
+  }, [router, updateData.date, updateData.id, updateData.name, updateData.price, updateData.type]);
+
+  useEffect(() => {
+    return () => {
+      clearUpdateData();
+    };
   }, []);
 
   const handleSubmit = () => {
@@ -57,13 +79,7 @@ const Update = () => {
       setIsLoading(false);
       if (result.success) {
         openSnackbar("success", "Update expense success");
-        setUpdateData({
-          id: 0,
-          name: "",
-          type: 0,
-          price: 0,
-          date: new Date(),
-        });
+        clearUpdateData();
         dispatch(setExpenseMessage(result.message));
         router.push("/expense");
       } else openSnackbar("error", result.message);
@@ -84,8 +100,9 @@ const Update = () => {
     }
     setOpen(false);
   };
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setName(event.target.value);
+  const handleNameChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setName(event.target.value);
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
     setType(parseInt(event.target.value, 10));
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
