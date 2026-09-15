@@ -3,9 +3,10 @@ import Loader from "@component/Loader/Loader";
 import SnackbarAlert from "@component/SnackbarAlert/SnackbarAlert";
 import Auth from "@layout/Auth";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { consumeSessionExpiredNotice } from "@service/session.service";
 import { useTranslation } from "locale/translator";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const Login = () => {
   const { isAuthenticated, login } = useAuth();
@@ -53,6 +54,11 @@ const Login = () => {
     }
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (consumeSessionExpiredNotice())
+      openSnackbar("warning", translate("sessionExpired"));
+  }, []);
 
   return isAuthenticated ? (
     <Loader />

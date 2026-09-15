@@ -1,6 +1,9 @@
 import Loader from "@component/Loader/Loader";
 import { AuthAPI } from "@api";
-import { AUTH_TOKEN_KEY } from "@interface/constant";
+import {
+  AUTH_TOKEN_KEY,
+  SESSION_CHECK_INTERVAL_MS,
+} from "@interface/constant";
 import { User } from "@interface/entity.interface";
 import {
   APIResponse,
@@ -8,14 +11,18 @@ import {
   ServiceResponse,
 } from "@interface/http.interface";
 import {
-  getTokenCookie,
   getUserCookie,
-  removeTokenCookie,
-  removeUserCookie,
+  hasValidTokenCookie,
   setTokenCookie,
   setUserCookie,
 } from "@service/cookie.service";
-import { getUTCTimestamp, removeLocalStorageItem } from "@util";
+import {
+  clearSession,
+  expireSession,
+  registerSessionExpiredHandler,
+  resetSessionExpiryGuard,
+} from "@service/session.service";
+import { getUTCTimestamp } from "@util";
 import { AxiosResponse } from "axios";
 import { useCurrency } from "currency";
 import { encryptPayload } from "encryptor";
@@ -28,9 +35,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { resetExpenseReduxStore } from "redux/expense";
-import { useAppDispatch } from "redux/hooks";
-import { resetIncomeReduxStore } from "redux/income";
 
 const DefaultUser: User = {
   id: 0,
@@ -86,24 +90,64 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: FC<{ children: any }> = ({ children }) => {
   const [user, setUser] = useState<User>(DefaultUser);
   const [loading, setLoading] = useState(true);
-  const dispatch = useAppDispatch();
+  const router = useRouter();
   const { updateCurrency } = useCurrency();
 
+  // Lets the axios interceptors end the session without a router
   useEffect(() => {
-    async function loadUserFromCookies() {
-      const token = getTokenCookie();
-      if (token) {
-        const userString = getUserCookie();
-        if (userString) {
-          const user: User = JSON.parse(userString);
-          updateCurrency(user.currency);
-          setUser(user);
-        }
+    registerSessionExpiredHandler(() => {
+      setUser(DefaultUser);
+      router.replace("/login");
+    });
+    return () => registerSessionExpiredHandler(null);
+  }, [router]);
+
+  useEffect(() => {
+    function loadUserFromCookies() {
+      // A user cookie without a live token is a dead session, not a login
+      if (!hasValidTokenCookie()) {
+        if (getUserCookie()) clearSession();
+        setLoading(false);
+        return;
+      }
+
+      const userString = getUserCookie();
+      if (userString) {
+        const user: User = JSON.parse(userString);
+        updateCurrency(user.currency);
+        setUser(user);
       }
       setLoading(false);
     }
     loadUserFromCookies();
   }, []);
+
+  // A tab left open can outlive its token, and would otherwise keep rendering
+  // as signed in while every API call behind it fails
+  useEffect(() => {
+    if (loading || !user.id) return;
+
+    const verifySession = () => {
+      if (!hasValidTokenCookie()) expireSession();
+    };
+    const verifySessionOnVisible = () => {
+      if (document.visibilityState === "visible") verifySession();
+    };
+
+    verifySession();
+    const interval = window.setInterval(
+      verifySession,
+      SESSION_CHECK_INTERVAL_MS
+    );
+    window.addEventListener("focus", verifySession);
+    document.addEventListener("visibilitychange", verifySessionOnVisible);
+
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", verifySession);
+      document.removeEventListener("visibilitychange", verifySessionOnVisible);
+    };
+  }, [loading, user.id]);
 
   const login = async (
     email: string,
@@ -138,6 +182,7 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
       if (token) {
         setTokenCookie(token);
         setUserCookie(user);
+        resetSessionExpiryGuard();
         setUser(user);
         updateCurrency(user.currency);
         window.location.pathname = "/dashboard";
@@ -159,12 +204,7 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
   };
 
   const logout = () => {
-    dispatch(resetExpenseReduxStore());
-    dispatch(resetIncomeReduxStore());
-    removeLocalStorageItem("updateDataExpense");
-    removeLocalStorageItem("updateDataIncome");
-    removeTokenCookie();
-    removeUserCookie();
+    clearSession();
     setUser(DefaultUser);
     window.location.pathname = "/login";
   };

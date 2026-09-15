@@ -2,6 +2,15 @@ export const AUTH_TOKEN_KEY = "x-token";
 
 export const HTTP_STATUS_OK = 200;
 export const HTTP_STATUS_CREATED = 201;
+export const HTTP_STATUS_UNAUTHORIZED = 401;
+
+// Reachable without a session, so a 401 from them must not end the session
+export const PUBLIC_API_PATHS = ["/auth/forgot", "/auth/reset"];
+
+export const SESSION_CHECK_INTERVAL_MS = 60 * 1000;
+
+// Used when the token carries no readable expiry
+export const DEFAULT_TOKEN_LIFETIME_DAYS = 1;
 
 export const SEARCH_TGL_BUTTON_ON_TEXT = "Turn On Search";
 export const SEARCH_TGL_BUTTON_OFF_TEXT = "Turn Off Search";
