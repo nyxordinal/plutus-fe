@@ -93,7 +93,6 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
   const router = useRouter();
   const { updateCurrency } = useCurrency();
 
-  // Lets the axios interceptors end the session without a router
   useEffect(() => {
     registerSessionExpiredHandler(() => {
       setUser(DefaultUser);
@@ -104,7 +103,6 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
 
   useEffect(() => {
     function loadUserFromCookies() {
-      // A user cookie without a live token is a dead session, not a login
       if (!hasValidTokenCookie()) {
         if (getUserCookie()) clearSession();
         setLoading(false);
@@ -122,8 +120,6 @@ export const AuthProvider: FC<{ children: any }> = ({ children }) => {
     loadUserFromCookies();
   }, []);
 
-  // A tab left open can outlive its token, and would otherwise keep rendering
-  // as signed in while every API call behind it fails
   useEffect(() => {
     if (loading || !user.id) return;
 

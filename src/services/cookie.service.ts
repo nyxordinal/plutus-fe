@@ -8,8 +8,6 @@ const KEY_TOKEN = "32EML6C5fJYjrUFe";
 // Token Name for user data
 const KEY_USER = "akszdrhh7Yz4GShe";
 
-// Browsers cap cookie lifetimes at 400 days, an expiry past that means the exp
-// claim is not in the unit we expect
 const MAX_TOKEN_LIFETIME_MS = 400 * 24 * 60 * 60 * 1000;
 
 const getTokenExpiry = (token: string): Date | null => {
@@ -30,7 +28,6 @@ const getTokenExpiry = (token: string): Date | null => {
   }
 };
 
-// Keeps the session cookies from outliving the token the server issued
 const getSessionCookieExpiry = (token: string): Date | number =>
   getTokenExpiry(token) || DEFAULT_TOKEN_LIFETIME_DAYS;
 
@@ -50,7 +47,6 @@ export const getUserCookie = (): string => {
   return Cookies.get(KEY_USER) || "";
 };
 
-// Must be called after setTokenCookie to mirror the token lifetime
 export const setUserCookie = (user: User): void => {
   Cookies.set(KEY_USER, JSON.stringify(user), {
     expires: getSessionCookieExpiry(getTokenCookie()),

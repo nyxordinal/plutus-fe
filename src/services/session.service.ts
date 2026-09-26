@@ -11,20 +11,16 @@ type SessionExpiredHandler = () => void;
 let sessionExpiredHandler: SessionExpiredHandler | null = null;
 let expiringSession = false;
 
-// AuthProvider owns the redirect so modules without a router (the axios
-// interceptors) can end a session too
 export const registerSessionExpiredHandler = (
   handler: SessionExpiredHandler | null
 ): void => {
   sessionExpiredHandler = handler;
 };
 
-// sessionStorage, so the notice survives both a redirect and a reload
 const markSessionExpired = (): void => {
   try {
     window.sessionStorage.setItem(KEY_SESSION_EXPIRED, "1");
   } catch (error) {
-    // the redirect matters more than the notice
   }
 };
 
@@ -53,7 +49,6 @@ export const resetSessionExpiryGuard = (): void => {
   expiringSession = false;
 };
 
-// Safe to call repeatedly, only the first call redirects
 export const expireSession = (): void => {
   if (typeof window === "undefined" || expiringSession) return;
   expiringSession = true;

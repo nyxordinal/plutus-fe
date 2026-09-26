@@ -27,16 +27,12 @@ const buildRequestError = (
   return error;
 };
 
-// `API` also serves endpoints that work without a session, those must not be
-// able to log the user out
 const isPublicPath = (url = ""): boolean =>
   PUBLIC_API_PATHS.some((path) => url.startsWith(path));
 
 const handleRequestSend = (config: AxiosRequestConfig) => {
   const modifiedconfig = config;
 
-  // Every other endpoint needs a token, so a missing or expired one is an
-  // expired session: end it now instead of waiting for the 401
   if (!isPublicPath(config.url) && !hasValidTokenCookie()) {
     expireSession();
     return Promise.reject(
@@ -63,7 +59,6 @@ const handleResponseReceive = (response: AxiosResponse) => {
 const handleResponseError = (errorResp: AxiosError<APIError>) => {
   const status = errorResp.response?.status;
 
-  // The server rejected our token, stop trusting the local session
   if (
     status === HTTP_STATUS_UNAUTHORIZED &&
     !isPublicPath(errorResp.config?.url)

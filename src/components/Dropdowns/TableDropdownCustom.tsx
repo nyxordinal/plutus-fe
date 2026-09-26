@@ -12,6 +12,23 @@ type PropType = {
   updateDataKey: string;
 };
 
+type MenuPosition = {
+  top?: number;
+  bottom?: number;
+  right: number;
+};
+
+const MENU_GAP_PX = 4;
+const MENU_MARGIN_PX = 8;
+
+const getMenuPosition = (button: HTMLElement): MenuPosition => {
+  const rect = button.getBoundingClientRect();
+  const right = Math.max(window.innerWidth - rect.right, MENU_MARGIN_PX);
+  return rect.bottom > window.innerHeight / 2
+    ? { bottom: window.innerHeight - rect.top + MENU_GAP_PX, right }
+    : { top: rect.bottom + MENU_GAP_PX, right };
+};
+
 const TableDropdownCustom = ({
   item,
   updatePageUrl,
@@ -20,8 +37,12 @@ const TableDropdownCustom = ({
 }: PropType) => {
   const router = useRouter();
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
+  const [menuPosition, setMenuPosition] = useState<MenuPosition>({
+    top: 0,
+    right: 0,
+  });
   const btnRef = useRef<HTMLAnchorElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const [updateData, setUpdateData] = useLocalStorage<TableItem>(
     updateDataKey,
     {
@@ -33,13 +54,7 @@ const TableDropdownCustom = ({
     }
   );
   const openDropdownPopover = () => {
-    if (btnRef.current) {
-      const rect = btnRef.current.getBoundingClientRect();
-      setButtonPosition({
-        top: rect.bottom + window.scrollY,
-        left: rect.right + window.scrollX,
-      });
-    }
+    if (btnRef.current) setMenuPosition(getMenuPosition(btnRef.current));
     setDropdownPopoverShow(true);
   };
   const closeDropdownPopover = () => {
@@ -47,16 +62,35 @@ const TableDropdownCustom = ({
   };
   useEffect(() => {
     if (!dropdownPopoverShow) return;
-    const handleClickOutside = () => closeDropdownPopover();
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+
+    const handlePointerDown = (event: Event) => {
+      const target = event.target as Node;
+      if (
+        btnRef.current?.contains(target) ||
+        menuRef.current?.contains(target)
+      )
+        return;
+      closeDropdownPopover();
+    };
+    const handleReposition = () => {
+      if (btnRef.current) setMenuPosition(getMenuPosition(btnRef.current));
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("scroll", handleReposition, true);
+    window.addEventListener("resize", handleReposition);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("scroll", handleReposition, true);
+      window.removeEventListener("resize", handleReposition);
+    };
   }, [dropdownPopoverShow]);
   return (
     <>
       <div className="inline-block text-left">
         <a
           ref={btnRef}
-          className="text-blueGray-500 py-1 px-3"
+          className="text-blueGray-500 inline-flex items-center justify-center w-10 h-10"
           href="#pablo"
           onClick={(e) => {
             e.preventDefault();
@@ -70,12 +104,14 @@ const TableDropdownCustom = ({
       {dropdownPopoverShow &&
         createPortal(
           <div
+            ref={menuRef}
             className="fixed bg-white text-base z-50 py-2 list-none text-left rounded shadow-lg min-w-48"
             style={{
-              top: `${buttonPosition.top}px`,
-              left: `calc(${buttonPosition.left}px - 200px)`,
+              top: menuPosition.top,
+              bottom: menuPosition.bottom,
+              right: menuPosition.right,
+              maxWidth: `calc(100vw - ${MENU_MARGIN_PX * 2}px)`,
             }}
-            onClick={(e) => e.stopPropagation()}
           >
             <a
               href="#pablo"
