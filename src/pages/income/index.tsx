@@ -163,6 +163,7 @@ const IncomePage = () => {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 updateDataKey="updateDataIncome"
+                cloneDataKey="cloneDataIncome"
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleDeleteClick={handleDeleteClick}

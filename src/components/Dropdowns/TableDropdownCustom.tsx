@@ -1,5 +1,6 @@
 import { TableItem } from "@interface/entity.interface";
 import { useLocalStorage } from "@util";
+import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
@@ -8,8 +9,10 @@ import { createPortal } from "react-dom";
 type PropType = {
   item: TableItem;
   updatePageUrl: string;
+  createPageUrl: string;
   handleDeleteClick: (ids: number[]) => Promise<void>;
   updateDataKey: string;
+  cloneDataKey: string;
 };
 
 type MenuPosition = {
@@ -32,10 +35,13 @@ const getMenuPosition = (button: HTMLElement): MenuPosition => {
 const TableDropdownCustom = ({
   item,
   updatePageUrl,
+  createPageUrl,
   updateDataKey,
+  cloneDataKey,
   handleDeleteClick,
 }: PropType) => {
   const router = useRouter();
+  const { translate } = useTranslation();
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const [menuPosition, setMenuPosition] = useState<MenuPosition>({
     top: 0,
@@ -53,6 +59,13 @@ const TableDropdownCustom = ({
       date: new Date(),
     }
   );
+  const [, setCloneData] = useLocalStorage<TableItem>(cloneDataKey, {
+    id: 0,
+    name: "",
+    type: 0,
+    price: 0,
+    date: new Date(),
+  });
   const openDropdownPopover = () => {
     if (btnRef.current) setMenuPosition(getMenuPosition(btnRef.current));
     setDropdownPopoverShow(true);
@@ -129,6 +142,18 @@ const TableDropdownCustom = ({
             </a>
             <a
               href="#pablo"
+              className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-blueGray-50"
+              onClick={(e) => {
+                e.preventDefault();
+                setCloneData(item);
+                closeDropdownPopover();
+                router.push(createPageUrl);
+              }}
+            >
+              {translate("clone")}
+            </a>
+            <a
+              href="#pablo"
               className={
                 "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-blueGray-50"
               }
@@ -149,6 +174,8 @@ const TableDropdownCustom = ({
 
 TableDropdownCustom.propTypes = {
   updatePageUrl: PropTypes.string,
+  createPageUrl: PropTypes.string,
+  cloneDataKey: PropTypes.string,
 };
 
 export default TableDropdownCustom;

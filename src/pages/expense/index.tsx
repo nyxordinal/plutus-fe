@@ -179,6 +179,7 @@ const ExpensePage = () => {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 updateDataKey="updateDataExpense"
+                cloneDataKey="cloneDataExpense"
                 handleChangePage={handleChangePage}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleDeleteClick={handleDeleteClick}

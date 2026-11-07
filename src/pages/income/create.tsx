@@ -2,10 +2,11 @@ import useAuth, { ProtectRoute } from "@auth";
 import RecordFormLayout from "@component/Forms/RecordFormLayout";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { createIncome } from "@service/income.service";
-import { formatDateSimple } from "@util";
+import { formatDateSimple, useLocalStorage } from "@util";
 import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TableItem } from "@interface/entity.interface";
 import { setIncomeMessage } from "redux/general";
 import { useAppDispatch } from "redux/hooks";
 
@@ -22,6 +23,18 @@ const Create = () => {
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cloneData, setCloneData] = useLocalStorage<TableItem>(
+    "cloneDataIncome",
+    { id: 0, name: "", type: 0, price: 0, date: new Date() }
+  );
+
+  useEffect(() => {
+    if (!cloneData.id) return;
+    setSource(cloneData.name);
+    setAmount(cloneData.price);
+    setDate(new Date(cloneData.date));
+    setCloneData({ id: 0, name: "", type: 0, price: 0, date: new Date() });
+  }, [cloneData.id, cloneData.name, cloneData.price, cloneData.date]);
 
   const handleSourceChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

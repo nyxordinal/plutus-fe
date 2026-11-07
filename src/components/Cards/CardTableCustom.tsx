@@ -20,6 +20,7 @@ type PropType = {
   page: number;
   rowsPerPage: number;
   updateDataKey: string;
+  cloneDataKey: string;
   handleChangePage: (event: unknown, newPage: number) => void;
   handleChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDeleteClick: (ids: number[]) => Promise<void>;
@@ -41,6 +42,7 @@ const CardTableCustom = ({
   page,
   rowsPerPage,
   updateDataKey,
+  cloneDataKey,
   handleChangePage,
   handleChangeRowsPerPage,
   handleDeleteClick,
@@ -202,6 +204,8 @@ const CardTableCustom = ({
                             item={row}
                             updateDataKey={updateDataKey}
                             updatePageUrl={updatePageUrl}
+                            createPageUrl={createPageUrl}
+                            cloneDataKey={cloneDataKey}
                             handleDeleteClick={handleDeleteClick}
                           />
                         </td>

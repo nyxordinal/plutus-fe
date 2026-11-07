@@ -3,10 +3,11 @@ import RecordFormLayout from "@component/Forms/RecordFormLayout";
 import { EXPENSE_TYPE } from "@interface/enum";
 import { AlertColor, SnackbarCloseReason } from "@mui/material";
 import { createExpense } from "@service/expense.service";
-import { enumToArray, formatDateSimple } from "@util";
+import { enumToArray, formatDateSimple, useLocalStorage } from "@util";
 import { useTranslation } from "locale/translator";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TableItem } from "@interface/entity.interface";
 import { setExpenseMessage } from "redux/general";
 import { useAppDispatch } from "redux/hooks";
 
@@ -26,6 +27,19 @@ const Create = () => {
   const [msg, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<AlertColor>("success");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cloneData, setCloneData] = useLocalStorage<TableItem>(
+    "cloneDataExpense",
+    { id: 0, name: "", type: 0, price: 0, date: new Date() }
+  );
+
+  useEffect(() => {
+    if (!cloneData.id) return;
+    setName(cloneData.name);
+    setType(cloneData.type);
+    setPrice(cloneData.price);
+    setDate(new Date(cloneData.date));
+    setCloneData({ id: 0, name: "", type: 0, price: 0, date: new Date() });
+  }, [cloneData.id, cloneData.name, cloneData.price, cloneData.type, cloneData.date]);
 
   const handleNameChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
